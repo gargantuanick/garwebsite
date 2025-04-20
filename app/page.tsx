@@ -18,7 +18,7 @@ export default function Home() {
         <div className="container-custom relative z-10 w-full px-4 sm:px-6 lg:px-8">
           <div className="max-w-3xl mx-auto animate-fade-in text-center sm:text-left">
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight mb-6">
-              INNOVATION BEYOND OUR LINE OF SIGHT
+              INNOVATION BEYOND OUR LINE OF SIGHT!
             </h1>
             <p className="text-lg md:text-xl font-light text-gray-300 max-w-3xl mb-8">
               Where technology accelerates human flourishing

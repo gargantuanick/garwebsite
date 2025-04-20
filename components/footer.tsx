@@ -48,7 +48,7 @@ export default function Footer() {
           </div>
 
           <div>
-            <h3 className="text-xl font-bold mb-6">Let&apos;s stay in touch!</h3>
+            <h3 className="text-xl font-bold mb-4 text-primary">Let&apos;s stay in touch!</h3>
             {isSuccess ? (
               <div className="bg-primary/20 border border-primary/30 rounded-md p-4 text-foreground animate-fade-in">
                 Thanks for signing up!
@@ -56,17 +56,27 @@ export default function Footer() {
             ) : (
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div>
-                  <div className="flex">
+                  <div className="flex flex-col sm:flex-row">
                     <input
                       type="email"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       placeholder="Your email address"
                       required
-                      className="form-input rounded-r-none flex-grow focus:outline-none"
+                      className="form-input rounded-t-md sm:rounded-r-none sm:rounded-l-md flex-grow focus:outline-none mb-2 sm:mb-0"
                     />
-                    <button type="submit" disabled={isSubmitting} className="btn-primary rounded-l-none px-4">
-                      {isSubmitting ? <span className="animate-pulse">...</span> : <ArrowRight size={20} />}
+                    <button
+                      type="submit"
+                      disabled={isSubmitting}
+                      className="btn-primary rounded-b-md sm:rounded-l-none sm:rounded-r-md px-6 py-3 font-semibold text-black bg-primary hover:bg-primary/90 transition-all duration-300 flex items-center justify-center"
+                    >
+                      {isSubmitting ? (
+                        <span className="animate-pulse">...</span>
+                      ) : (
+                        <>
+                          Subscribe <ArrowRight size={18} className="ml-2" />
+                        </>
+                      )}
                     </button>
                   </div>
                   {error && <p className="mt-2 text-red-500 text-sm">{error}</p>}

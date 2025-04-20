@@ -110,8 +110,9 @@ export default function ContactPage() {
                     name="company"
                     value={formData.company}
                     onChange={handleChange}
+                    required
                     className="form-input focus:outline-none"
-                    placeholder="Your company name (optional)"
+                    placeholder="Your company name"
                   />
                 </div>
                 <div>
@@ -130,7 +131,11 @@ export default function ContactPage() {
                   ></textarea>
                 </div>
                 <div>
-                  <button type="submit" disabled={isSubmitting} className="btn-primary w-full">
+                  <button
+                    type="submit"
+                    disabled={isSubmitting}
+                    className="btn-primary w-full text-lg py-4 font-semibold shadow-lg hover:shadow-xl transition-all duration-300"
+                  >
                     {isSubmitting ? "SUBMITTING..." : "SUBMIT"}
                   </button>
                 </div>
