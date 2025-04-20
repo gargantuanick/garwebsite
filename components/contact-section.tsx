@@ -125,13 +125,42 @@ export default function ContactSection() {
                       placeholder="Message"
                     ></textarea>
                   </div>
-                  <div className="pt-4">
+                  <div className="pt-6">
                     <button
                       type="submit"
                       disabled={isSubmitting}
-                      className="w-full bg-primary text-black font-medium py-3 rounded-md hover:bg-primary/90 transition-colors"
+                      className="w-full bg-primary text-black font-semibold py-4 rounded-md hover:bg-primary/90 transition-all duration-300 shadow-[0_0_15px_rgba(0,178,255,0.5)] hover:shadow-[0_0_25px_rgba(0,178,255,0.7)] relative overflow-hidden group"
                     >
-                      {isSubmitting ? "SUBMITTING..." : "CONTACT"}
+                      <span className="relative z-10 flex items-center justify-center">
+                        {isSubmitting ? (
+                          <span className="flex items-center">
+                            <svg
+                              className="animate-spin -ml-1 mr-3 h-5 w-5 text-black"
+                              xmlns="http://www.w3.org/2000/svg"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                            >
+                              <circle
+                                className="opacity-25"
+                                cx="12"
+                                cy="12"
+                                r="10"
+                                stroke="currentColor"
+                                strokeWidth="4"
+                              ></circle>
+                              <path
+                                className="opacity-75"
+                                fill="currentColor"
+                                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                              ></path>
+                            </svg>
+                            SUBMITTING...
+                          </span>
+                        ) : (
+                          "CONTACT US"
+                        )}
+                      </span>
+                      <span className="absolute bottom-0 left-0 w-full h-1 bg-white/20 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300"></span>
                     </button>
                   </div>
                 </form>
