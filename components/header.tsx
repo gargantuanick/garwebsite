@@ -52,11 +52,11 @@ export default function Header() {
           ))}
           <Link
             href="/contact"
-            className={`px-4 py-2 border border-primary rounded-md text-sm font-medium transition-colors ${
+            className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
               pathname === "/contact" ? "bg-primary text-black" : "text-primary hover:bg-primary/10"
             }`}
           >
-            CONTACT
+            Contact
           </Link>
         </nav>
 
