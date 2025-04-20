@@ -1,6 +1,7 @@
 import Link from "next/link"
 import Image from "next/image"
 import Particles from "@/components/particles"
+import ContactSection from "@/components/contact-section"
 
 export default function Home() {
   return (
@@ -25,7 +26,7 @@ export default function Home() {
             </p>
             <Link href="/services" className="btn-primary">
               VIEW SERVICES
-            </Link> 
+            </Link>
           </div>
         </div>
       </div>
@@ -145,6 +146,9 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      {/* Contact Section */}
+      <ContactSection />
     </>
   )
 }
