@@ -13,7 +13,7 @@ const inter = Inter({
 })
 
 export const metadata: Metadata = {
-  title: "Gargantua Group | Transforming Data into Business Intelligence",
+  title: "Gargantua Group | Transforming Data Into Business Intelligence",
   description:
     "Gargantua Group stands at the forefront of technology, specializing in strategy, data processing, machine learning, and generative AI services.",
     generator: 'v0.dev'
