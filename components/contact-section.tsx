@@ -129,13 +129,13 @@ export default function ContactSection() {
                     <button
                       type="submit"
                       disabled={isSubmitting}
-                      className="w-full bg-primary text-black font-semibold py-4 rounded-md hover:bg-primary/90 transition-all duration-300 shadow-[0_0_15px_rgba(0,178,255,0.5)] hover:shadow-[0_0_25px_rgba(0,178,255,0.7)] relative overflow-hidden group"
+                      className="w-full bg-primary text-white font-semibold py-4 rounded-md hover:bg-primary/90 transition-all duration-300 shadow-[0_0_15px_rgba(0,178,255,0.5)] hover:shadow-[0_0_25px_rgba(0,178,255,0.7)] relative overflow-hidden group"
                     >
                       <span className="relative z-10 flex items-center justify-center">
                         {isSubmitting ? (
                           <span className="flex items-center">
                             <svg
-                              className="animate-spin -ml-1 mr-3 h-5 w-5 text-black"
+                              className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
                               xmlns="http://www.w3.org/2000/svg"
                               fill="none"
                               viewBox="0 0 24 24"
