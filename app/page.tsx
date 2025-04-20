@@ -26,7 +26,7 @@ export default function Home() {
             </p>
             <Link
               href="/services"
-              className="btn-primary text-black font-semibold py-4 px-8 text-lg border border-black transition-all duration-300"
+              className="bg-white text-black font-semibold py-4 px-8 text-lg border border-black rounded-md hover:bg-gray-100 transition-all duration-300"
             >
               VIEW SERVICES
             </Link>

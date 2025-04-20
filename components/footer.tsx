@@ -68,9 +68,13 @@ export default function Footer() {
                     <button
                       type="submit"
                       disabled={isSubmitting}
-                      className="btn-primary rounded-b-md sm:rounded-l-none sm:rounded-r-md px-4 py-3 font-semibold text-black bg-primary hover:bg-primary/90 transition-all duration-300 flex items-center justify-center"
+                      className="bg-white rounded-b-md sm:rounded-l-none sm:rounded-r-md px-4 py-3 font-semibold text-black hover:bg-gray-100 transition-all duration-300 flex items-center justify-center"
                     >
-                      {isSubmitting ? <span className="animate-pulse">...</span> : <ArrowRight size={20} />}
+                      {isSubmitting ? (
+                        <span className="animate-pulse">...</span>
+                      ) : (
+                        <ArrowRight size={20} className="text-black" />
+                      )}
                     </button>
                   </div>
                   {error && <p className="mt-2 text-red-500 text-sm">{error}</p>}
