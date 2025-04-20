@@ -5,7 +5,7 @@ export default function ServicesPage() {
   return (
     <>
       {/* Intelligent Data Mastery */}
-      <section id="data-mastery" className="min-h-screen flex items-center pt-20 pb-20 bg-black">
+      <section id="data-mastery" className="min-h-screen flex items-center pt-20 pb-12 bg-black">
         <div className="container-custom">
           <div className="mb-8">
             <Link href="/" className="text-sm text-gray-400 hover:text-primary">
@@ -56,17 +56,13 @@ export default function ServicesPage() {
                   </p>
                 </div>
               </div>
-
-              <Link href="/contact" className="btn-primary inline-block mt-4">
-                CONTACT US
-              </Link>
             </div>
           </div>
         </div>
       </section>
 
       {/* Cognitive System Engineering */}
-      <section id="cognitive-systems" className="min-h-screen flex items-center py-20 bg-black">
+      <section id="cognitive-systems" className="min-h-screen flex items-center py-12 bg-black">
         <div className="container-custom">
           <div className="mb-8">
             <Link href="/" className="text-sm text-gray-400 hover:text-primary">
@@ -111,17 +107,13 @@ export default function ServicesPage() {
                   </p>
                 </div>
               </div>
-
-              <Link href="/contact" className="btn-primary inline-block mt-4">
-                CONTACT US
-              </Link>
             </div>
           </div>
         </div>
       </section>
 
       {/* Ecosystem Architecture */}
-      <section id="ecosystem-architecture" className="min-h-screen flex items-center py-20 bg-black">
+      <section id="ecosystem-architecture" className="min-h-screen flex items-center py-12 bg-black">
         <div className="container-custom">
           <div className="mb-8">
             <Link href="/" className="text-sm text-gray-400 hover:text-primary">
@@ -159,10 +151,6 @@ export default function ServicesPage() {
                   </p>
                 </div>
               </div>
-
-              <Link href="/contact" className="btn-primary inline-block mt-4">
-                CONTACT US
-              </Link>
             </div>
           </div>
         </div>
