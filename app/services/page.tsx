@@ -126,7 +126,7 @@ export default function ServicesPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
             <div>
               <Image
-                src="/images/services/ecosystem-architecture.jpg"
+                src="/images/services/digital-ecosystem.jpg"
                 alt="Ecosystem Architecture"
                 width={600}
                 height={400}

@@ -128,7 +128,7 @@ export default function Home() {
             <div className="card h-full flex flex-col">
               <div className="relative w-full aspect-video mb-6 overflow-hidden rounded-md">
                 <Image
-                  src="/images/services/ecosystem-architecture.jpg"
+                  src="/images/services/digital-ecosystem.jpg"
                   alt="Digital Ecosystem"
                   width={500}
                   height={300}
