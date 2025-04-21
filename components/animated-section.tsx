@@ -13,12 +13,13 @@ interface AnimatedSectionProps {
   id?: string
 }
 
+// Update the rootMargin to trigger animations slightly earlier
 export default function AnimatedSection({
   children,
   className = "",
   animation = "fade-up",
   threshold = 0.05,
-  rootMargin = "-10px",
+  rootMargin = "-20px",
   delay = 0,
   id,
 }: AnimatedSectionProps) {

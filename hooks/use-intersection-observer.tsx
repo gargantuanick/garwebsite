@@ -8,8 +8,9 @@ interface UseIntersectionObserverProps {
   freezeOnceVisible?: boolean
 }
 
+// Update the default threshold to trigger animations slightly earlier
 export function useIntersectionObserver({
-  threshold = 0.05,
+  threshold = 0.03,
   rootMargin = "0px",
   freezeOnceVisible = true,
 }: UseIntersectionObserverProps = {}) {
