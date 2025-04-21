@@ -3,8 +3,7 @@
 import type React from "react"
 import { useState } from "react"
 import Image from "next/image"
-import { useIntersectionObserver } from "@/hooks/use-intersection-observer"
-import AnimatedItem from "@/components/animated-item"
+import RevealSection from "@/components/reveal-section"
 
 export default function ContactSection() {
   const [formData, setFormData] = useState({
@@ -16,8 +15,6 @@ export default function ContactSection() {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isSuccess, setIsSuccess] = useState(false)
   const [error, setError] = useState("")
-
-  const section = useIntersectionObserver({ threshold: 0.1, rootMargin: "-50px" })
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target
@@ -42,7 +39,7 @@ export default function ContactSection() {
   }
 
   return (
-    <div className="relative py-20" ref={section.ref as any}>
+    <div className="relative py-20">
       {/* Background Image */}
       <div className="absolute inset-0 z-0">
         <Image src="/images/contact-background.jpg" alt="City view" fill className="object-cover" />
@@ -52,19 +49,19 @@ export default function ContactSection() {
       <div className="container-custom relative z-10">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
           {/* Left side - Text */}
-          <AnimatedItem className="text-left" animation="fade-up" delay={100} isVisible={section.isIntersecting}>
+          <RevealSection className="text-left">
             <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-6">
               LET'S TALK ABOUT TRANSFORMING YOUR BUSINESS
             </h2>
             <p className="text-lg text-gray-300 mb-8">
               Our team of experts is ready to help you harness the power of data and AI to drive unprecedented growth.
             </p>
-          </AnimatedItem>
+          </RevealSection>
 
           {/* Right side - Form */}
-          <AnimatedItem animation="fade-up" delay={200} isVisible={section.isIntersecting}>
+          <RevealSection delay={200}>
             {isSuccess ? (
-              <div className="bg-black/30 backdrop-blur-sm border border-gray-700 rounded-md p-8 text-center animate-reveal">
+              <div className="bg-black/30 backdrop-blur-sm border border-gray-700 rounded-md p-8 text-center transition-all duration-500 opacity-100 translate-y-0">
                 <h3 className="text-2xl font-bold mb-4">Thank you for reaching out!</h3>
                 <p className="text-gray-300 mb-8">
                   We've received your message and will get back to you as soon as possible.
@@ -170,7 +167,7 @@ export default function ContactSection() {
                 </form>
               </div>
             )}
-          </AnimatedItem>
+          </RevealSection>
         </div>
       </div>
     </div>

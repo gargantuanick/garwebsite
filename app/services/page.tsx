@@ -2,17 +2,13 @@
 
 import Link from "next/link"
 import Image from "next/image"
-import AnimatedSection from "@/components/animated-section"
+import RevealSection from "@/components/reveal-section"
 
 export default function ServicesPage() {
   return (
     <>
       {/* Intelligent Data Mastery */}
-      <AnimatedSection
-        id="data-mastery"
-        className="min-h-screen flex items-center pt-20 pb-12 bg-black"
-        animation="reveal"
-      >
+      <RevealSection id="data-mastery" className="min-h-screen flex items-center pt-20 pb-12 bg-black">
         <div className="container-custom">
           <div className="mb-8">
             <Link href="/" className="text-sm text-gray-400 hover:text-primary">
@@ -66,14 +62,10 @@ export default function ServicesPage() {
             </div>
           </div>
         </div>
-      </AnimatedSection>
+      </RevealSection>
 
       {/* Cognitive System Engineering */}
-      <AnimatedSection
-        id="cognitive-systems"
-        className="min-h-screen flex items-center py-12 bg-black"
-        animation="reveal"
-      >
+      <RevealSection id="cognitive-systems" className="min-h-screen flex items-center py-12 bg-black">
         <div className="container-custom">
           <div className="mb-8">
             <Link href="/" className="text-sm text-gray-400 hover:text-primary">
@@ -121,14 +113,10 @@ export default function ServicesPage() {
             </div>
           </div>
         </div>
-      </AnimatedSection>
+      </RevealSection>
 
       {/* Ecosystem Architecture */}
-      <AnimatedSection
-        id="ecosystem-architecture"
-        className="min-h-screen flex items-center py-12 bg-black"
-        animation="reveal"
-      >
+      <RevealSection id="ecosystem-architecture" className="min-h-screen flex items-center py-12 bg-black">
         <div className="container-custom">
           <div className="mb-8">
             <Link href="/" className="text-sm text-gray-400 hover:text-primary">
@@ -169,7 +157,7 @@ export default function ServicesPage() {
             </div>
           </div>
         </div>
-      </AnimatedSection>
+      </RevealSection>
     </>
   )
 }
