@@ -11,7 +11,7 @@ export default function ServicesPage() {
       <AnimatedSection
         id="data-mastery"
         className="min-h-screen flex items-center pt-20 pb-12 bg-black"
-        animation="fade-up"
+        animation="reveal"
       >
         <div className="container-custom">
           <div className="mb-8">
@@ -72,7 +72,7 @@ export default function ServicesPage() {
       <AnimatedSection
         id="cognitive-systems"
         className="min-h-screen flex items-center py-12 bg-black"
-        animation="fade-up"
+        animation="reveal"
       >
         <div className="container-custom">
           <div className="mb-8">
@@ -127,7 +127,7 @@ export default function ServicesPage() {
       <AnimatedSection
         id="ecosystem-architecture"
         className="min-h-screen flex items-center py-12 bg-black"
-        animation="fade-up"
+        animation="reveal"
       >
         <div className="container-custom">
           <div className="mb-8">

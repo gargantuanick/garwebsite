@@ -15,7 +15,7 @@ export default function Home() {
   return (
     <>
       {/* Hero Section */}
-      <AnimatedSection animation="blur-in" className="relative min-h-screen flex items-center pt-20 overflow-hidden">
+      <AnimatedSection animation="reveal" className="relative min-h-screen flex items-center pt-20 overflow-hidden">
         <Particles />
         <div
           className="absolute inset-0 z-0 bg-cover bg-center opacity-70"
@@ -46,12 +46,7 @@ export default function Home() {
       <div className="py-20 bg-black" ref={dataSection.ref as any}>
         <div className="container-custom">
           <div className="flex flex-col md:flex-row items-center gap-12">
-            <AnimatedItem
-              className="md:w-1/2"
-              animation="fade-in-right"
-              delay={100}
-              isVisible={dataSection.isIntersecting}
-            >
+            <AnimatedItem className="md:w-1/2" animation="fade-up" delay={100} isVisible={dataSection.isIntersecting}>
               <div className="uppercase text-sm font-medium text-gray-400 tracking-wider mb-3">
                 TECHNOLOGY INNOVATION
               </div>
@@ -73,12 +68,7 @@ export default function Home() {
                 GET IN TOUCH
               </Link>
             </AnimatedItem>
-            <AnimatedItem
-              className="md:w-1/2"
-              animation="fade-in-left"
-              delay={300}
-              isVisible={dataSection.isIntersecting}
-            >
+            <AnimatedItem className="md:w-1/2" animation="fade-up" delay={200} isVisible={dataSection.isIntersecting}>
               <div className="relative aspect-square rounded-lg overflow-hidden">
                 <Image
                   src="/images/data-intelligence.jpg"
@@ -109,8 +99,8 @@ export default function Home() {
             {/* Data Mastery Card */}
             <AnimatedItem
               className="group relative"
-              animation="scale-up"
-              delay={300}
+              animation="fade-up"
+              delay={200}
               isVisible={servicesSection.isIntersecting}
             >
               <Link
@@ -147,8 +137,8 @@ export default function Home() {
             {/* Cognitive System Card */}
             <AnimatedItem
               className="group relative"
-              animation="scale-up"
-              delay={500}
+              animation="fade-up"
+              delay={300}
               isVisible={servicesSection.isIntersecting}
             >
               <Link
@@ -187,8 +177,8 @@ export default function Home() {
             {/* Ecosystem Architecture Card */}
             <AnimatedItem
               className="group relative"
-              animation="scale-up"
-              delay={700}
+              animation="fade-up"
+              delay={400}
               isVisible={servicesSection.isIntersecting}
             >
               <Link

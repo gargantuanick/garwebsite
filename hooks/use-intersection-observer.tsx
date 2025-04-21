@@ -9,7 +9,7 @@ interface UseIntersectionObserverProps {
 }
 
 export function useIntersectionObserver({
-  threshold = 0.1,
+  threshold = 0.05,
   rootMargin = "0px",
   freezeOnceVisible = true,
 }: UseIntersectionObserverProps = {}) {

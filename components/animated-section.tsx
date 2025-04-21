@@ -17,8 +17,8 @@ export default function AnimatedSection({
   children,
   className = "",
   animation = "fade-up",
-  threshold = 0.1,
-  rootMargin = "-50px",
+  threshold = 0.05,
+  rootMargin = "-10px",
   delay = 0,
   id,
 }: AnimatedSectionProps) {
@@ -39,6 +39,8 @@ export default function AnimatedSection({
         return "animate-scale-up"
       case "blur-in":
         return "animate-blur-in"
+      case "reveal":
+        return "animate-reveal"
       default:
         return "animate-fade-up"
     }
