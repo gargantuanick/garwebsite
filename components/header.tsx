@@ -52,8 +52,10 @@ export default function Header() {
           ))}
           <Link
             href="/contact"
-            className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
-              pathname === "/contact" ? "bg-primary text-black" : "text-primary hover:bg-primary/10"
+            className={`px-4 py-2 rounded-md text-sm font-medium transition-colors border ${
+              pathname === "/contact"
+                ? "bg-primary text-black border-primary"
+                : "text-primary hover:bg-primary/10 border-primary/30"
             }`}
           >
             Contact
