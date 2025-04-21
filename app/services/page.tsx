@@ -1,11 +1,18 @@
+"use client"
+
 import Link from "next/link"
 import Image from "next/image"
+import AnimatedSection from "@/components/animated-section"
 
 export default function ServicesPage() {
   return (
     <>
       {/* Intelligent Data Mastery */}
-      <section id="data-mastery" className="min-h-screen flex items-center pt-20 pb-12 bg-black">
+      <AnimatedSection
+        id="data-mastery"
+        className="min-h-screen flex items-center pt-20 pb-12 bg-black"
+        animation="fade-up"
+      >
         <div className="container-custom">
           <div className="mb-8">
             <Link href="/" className="text-sm text-gray-400 hover:text-primary">
@@ -59,10 +66,14 @@ export default function ServicesPage() {
             </div>
           </div>
         </div>
-      </section>
+      </AnimatedSection>
 
       {/* Cognitive System Engineering */}
-      <section id="cognitive-systems" className="min-h-screen flex items-center py-12 bg-black">
+      <AnimatedSection
+        id="cognitive-systems"
+        className="min-h-screen flex items-center py-12 bg-black"
+        animation="fade-up"
+      >
         <div className="container-custom">
           <div className="mb-8">
             <Link href="/" className="text-sm text-gray-400 hover:text-primary">
@@ -110,10 +121,14 @@ export default function ServicesPage() {
             </div>
           </div>
         </div>
-      </section>
+      </AnimatedSection>
 
       {/* Ecosystem Architecture */}
-      <section id="ecosystem-architecture" className="min-h-screen flex items-center py-12 bg-black">
+      <AnimatedSection
+        id="ecosystem-architecture"
+        className="min-h-screen flex items-center py-12 bg-black"
+        animation="fade-up"
+      >
         <div className="container-custom">
           <div className="mb-8">
             <Link href="/" className="text-sm text-gray-400 hover:text-primary">
@@ -154,7 +169,7 @@ export default function ServicesPage() {
             </div>
           </div>
         </div>
-      </section>
+      </AnimatedSection>
     </>
   )
 }

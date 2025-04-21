@@ -4,12 +4,18 @@ import Link from "next/link"
 import Image from "next/image"
 import Particles from "@/components/particles"
 import ContactSection from "@/components/contact-section"
+import AnimatedSection from "@/components/animated-section"
+import AnimatedItem from "@/components/animated-item"
+import { useIntersectionObserver } from "@/hooks/use-intersection-observer"
 
 export default function Home() {
+  const dataSection = useIntersectionObserver({ threshold: 0.1, rootMargin: "-50px" })
+  const servicesSection = useIntersectionObserver({ threshold: 0.1, rootMargin: "-50px" })
+
   return (
     <>
       {/* Hero Section */}
-      <div className="relative min-h-screen flex items-center pt-20 overflow-hidden">
+      <AnimatedSection animation="blur-in" className="relative min-h-screen flex items-center pt-20 overflow-hidden">
         <Particles />
         <div
           className="absolute inset-0 z-0 bg-cover bg-center opacity-70"
@@ -19,7 +25,7 @@ export default function Home() {
           }}
         />
         <div className="container-custom relative z-10 w-full px-4 sm:px-6 lg:px-8">
-          <div className="max-w-3xl mx-auto animate-fade-in text-center sm:text-left">
+          <div className="max-w-3xl mx-auto text-center sm:text-left">
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight mb-6">
               INNOVATION BEYOND OUR LINE OF SIGHT
             </h1>
@@ -34,13 +40,18 @@ export default function Home() {
             </Link>
           </div>
         </div>
-      </div>
+      </AnimatedSection>
 
       {/* Transforming Data Into Intelligence Section */}
-      <section className="py-20 bg-black">
+      <div className="py-20 bg-black" ref={dataSection.ref as any}>
         <div className="container-custom">
           <div className="flex flex-col md:flex-row items-center gap-12">
-            <div className="md:w-1/2">
+            <AnimatedItem
+              className="md:w-1/2"
+              animation="fade-in-right"
+              delay={100}
+              isVisible={dataSection.isIntersecting}
+            >
               <div className="uppercase text-sm font-medium text-gray-400 tracking-wider mb-3">
                 TECHNOLOGY INNOVATION
               </div>
@@ -61,8 +72,13 @@ export default function Home() {
               <Link href="/contact" className="btn-secondary mt-8 inline-flex">
                 GET IN TOUCH
               </Link>
-            </div>
-            <div className="md:w-1/2">
+            </AnimatedItem>
+            <AnimatedItem
+              className="md:w-1/2"
+              animation="fade-in-left"
+              delay={300}
+              isVisible={dataSection.isIntersecting}
+            >
               <div className="relative aspect-square rounded-lg overflow-hidden">
                 <Image
                   src="/images/data-intelligence.jpg"
@@ -71,22 +87,32 @@ export default function Home() {
                   className="object-cover"
                 />
               </div>
-            </div>
+            </AnimatedItem>
           </div>
         </div>
-      </section>
+      </div>
 
       {/* Harness The Power of Data and AI Section */}
-      <section className="py-20 bg-gray-900">
+      <div className="py-20 bg-gray-900" ref={servicesSection.ref as any}>
         <div className="container-custom">
-          <div className="text-center mb-16">
+          <AnimatedItem
+            className="text-center mb-16"
+            animation="fade-up"
+            delay={100}
+            isVisible={servicesSection.isIntersecting}
+          >
             <div className="uppercase text-sm font-medium text-gray-400 tracking-wider mb-3">ELEVATE YOUR INSIGHTS</div>
             <h2 className="text-3xl md:text-4xl font-bold">HARNESS THE POWER OF DATA AND AI</h2>
-          </div>
+          </AnimatedItem>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {/* Data Mastery Card */}
-            <div className="group relative">
+            <AnimatedItem
+              className="group relative"
+              animation="scale-up"
+              delay={300}
+              isVisible={servicesSection.isIntersecting}
+            >
               <Link
                 href="/services#data-mastery"
                 className="absolute inset-0 z-10"
@@ -116,10 +142,15 @@ export default function Home() {
                   Learn more
                 </Link>
               </div>
-            </div>
+            </AnimatedItem>
 
             {/* Cognitive System Card */}
-            <div className="group relative">
+            <AnimatedItem
+              className="group relative"
+              animation="scale-up"
+              delay={500}
+              isVisible={servicesSection.isIntersecting}
+            >
               <Link
                 href="/services#cognitive-systems"
                 className="absolute inset-0 z-10"
@@ -151,10 +182,15 @@ export default function Home() {
                   Learn more
                 </Link>
               </div>
-            </div>
+            </AnimatedItem>
 
             {/* Ecosystem Architecture Card */}
-            <div className="group relative">
+            <AnimatedItem
+              className="group relative"
+              animation="scale-up"
+              delay={700}
+              isVisible={servicesSection.isIntersecting}
+            >
               <Link
                 href="/services#ecosystem-architecture"
                 className="absolute inset-0 z-10"
@@ -186,13 +222,15 @@ export default function Home() {
                   Learn more
                 </Link>
               </div>
-            </div>
+            </AnimatedItem>
           </div>
         </div>
-      </section>
+      </div>
 
       {/* Contact Section */}
-      <ContactSection />
+      <AnimatedSection animation="fade-up" className="py-0">
+        <ContactSection />
+      </AnimatedSection>
     </>
   )
 }

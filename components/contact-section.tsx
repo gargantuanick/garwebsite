@@ -3,6 +3,8 @@
 import type React from "react"
 import { useState } from "react"
 import Image from "next/image"
+import { useIntersectionObserver } from "@/hooks/use-intersection-observer"
+import AnimatedItem from "@/components/animated-item"
 
 export default function ContactSection() {
   const [formData, setFormData] = useState({
@@ -14,6 +16,8 @@ export default function ContactSection() {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isSuccess, setIsSuccess] = useState(false)
   const [error, setError] = useState("")
+
+  const section = useIntersectionObserver({ threshold: 0.1, rootMargin: "-50px" })
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target
@@ -38,7 +42,7 @@ export default function ContactSection() {
   }
 
   return (
-    <div className="relative py-20">
+    <div className="relative py-20" ref={section.ref as any}>
       {/* Background Image */}
       <div className="absolute inset-0 z-0">
         <Image src="/images/contact-background.jpg" alt="City view" fill className="object-cover" />
@@ -48,17 +52,17 @@ export default function ContactSection() {
       <div className="container-custom relative z-10">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
           {/* Left side - Text */}
-          <div className="text-left">
+          <AnimatedItem className="text-left" animation="fade-in-right" delay={100} isVisible={section.isIntersecting}>
             <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-6">
               LET'S TALK ABOUT TRANSFORMING YOUR BUSINESS
             </h2>
             <p className="text-lg text-gray-300 mb-8">
               Our team of experts is ready to help you harness the power of data and AI to drive unprecedented growth.
             </p>
-          </div>
+          </AnimatedItem>
 
           {/* Right side - Form */}
-          <div>
+          <AnimatedItem animation="fade-in-left" delay={300} isVisible={section.isIntersecting}>
             {isSuccess ? (
               <div className="bg-black/30 backdrop-blur-sm border border-gray-700 rounded-md p-8 text-center animate-fade-in">
                 <h3 className="text-2xl font-bold mb-4">Thank you for reaching out!</h3>
@@ -166,7 +170,7 @@ export default function ContactSection() {
                 </form>
               </div>
             )}
-          </div>
+          </AnimatedItem>
         </div>
       </div>
     </div>
