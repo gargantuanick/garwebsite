@@ -1,0 +1,36 @@
+<!-- public/_forms.html -->
+<!DOCTYPE html>
+<html>
+  <head></head>
+  <body>
+    <!-- This form is ONLY for Netlify's build-time detection -->
+    <form
+      name="contact"
+      data-netlify="true"
+      data-netlify-honeypot="bot-field"
+      hidden
+    >
+      <!-- Required hidden field for Netlify -->
+      <input type="hidden" name="form-name" value="contact" />
+
+      <!-- List ALL the fields from your React form -->
+      <input type="text" name="name" />
+      <input type="email" name="email" />
+      <input type="text" name="company" />
+      <textarea name="message"></textarea>
+
+      <!-- Honeypot field -->
+      <p hidden>
+         <label>Don’t fill this out if you’re human: <input name="bot-field" /></label>
+      </p>
+    </form>
+
+    <!-- If you had other forms, you would add their definitions here too -->
+    <!--
+    <form name="other-form" data-netlify="true" hidden>
+      <input type="hidden" name="form-name" value="other-form" />
+      <input type="text" name="some-other-field" />
+    </form>
+    -->
+  </body>
+</html>
