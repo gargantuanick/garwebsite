@@ -37,7 +37,7 @@ const teamMembers = [
     slug: "richard-zhang",
     name: "Richard Zhang PhD",
     role: "AI Research Scientist",
-    bio: "Research scientist at Google DeepMind and OSS Vizier co-creator, bringing expertise in hyperparameter optimization and theoretical machine learning to enterprise applications.",
+    bio: "Dr Richard Zhang is a distinguished research scientist at Google DeepMind and a principal technical consultant for Gargantua Group, where he leads the development of cutting edge machine learning optimization frameworks.\n\nAt Gargantua Group, he consults on enterprise-scale AI systems with a focus on hyperparameter tuning and neural architecture search, bringing theoretical advances to production environments.\n\nIn his role at DeepMind, he serves on the Vizier team as a co-creator of OSS Vizier, specializing in Bayesian calibration and theoretical machine learning.\n\nRichard earned his Ph.D. in Applied Mathematics and Computer Science from UC Berkeley, after completing his undergraduate studies at Princeton University. His research has been featured at prestigious venues including NeurIPS, ICML, and ICLR, with particular recognition for his work in hyperparameter optimization and AI fairness. His collaborative efforts with Gargantua Group have been instrumental in bridging the gap between theoretical machine learning advances and practical enterprise applications.\n\n",
     imageSrc: "/images/team/richard-zhang.jpg",
   },
   {
