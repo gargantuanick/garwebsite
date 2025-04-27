@@ -5,6 +5,13 @@ import { useState } from "react"
 import Image from "next/image"
 import RevealSection from "@/components/reveal-section"
 
+// Helper function to encode form data for Netlify
+const encode = (data: { [key: string]: string }) => {
+  return Object.keys(data)
+    .map((key) => encodeURIComponent(key) + "=" + encodeURIComponent(data[key]))
+    .join("&")
+}
+
 export default function ContactSection() {
   const [formData, setFormData] = useState({
     name: "",
@@ -21,18 +28,52 @@ export default function ContactSection() {
     setFormData((prev) => ({ ...prev, [name]: value }))
   }
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => { // Type the event as HTMLFormElement
     e.preventDefault()
     setIsSubmitting(true)
     setError("")
+    setIsSuccess(false); // Reset success state on new submission
 
-    // Simulate API call
+    const form = e.target as HTMLFormElement;
+    const formName = form.getAttribute('name'); // Get form name dynamically
+
+    if (!formName) {
+      setError("Form name attribute is missing.");
+      setIsSubmitting(false);
+      return;
+    }
+
+    const payload = {
+      'form-name': formName, // Required by Netlify for JS submissions
+      ...formData,
+    }
+
     try {
-      await new Promise((resolve) => setTimeout(resolve, 1500))
+      const response = await fetch("/", { // POST to the same path
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: encode(payload),
+      })
+
+      if (!response.ok) {
+        // Try to get error message from Netlify, otherwise use generic one
+        let errorMessage = `Netlify submission failed: ${response.status} ${response.statusText}`;
+        try {
+          const errorBody = await response.json(); // Netlify might return JSON errors
+          errorMessage = errorBody.message || errorMessage;
+        } catch (parseError) {
+          // Ignore if response body is not JSON
+        }
+        throw new Error(errorMessage);
+      }
+
+      // If submission is successful
       setIsSuccess(true)
-      setFormData({ name: "", email: "", company: "", message: "" })
-    } catch (err) {
-      setError("Sorry, we were not able to submit the form. Please try again.")
+      setFormData({ name: "", email: "", company: "", message: "" }) // Clear the form
+
+    } catch (err: any) {
+      console.error("Form submission error:", err)
+      setError(err.message || "Sorry, we were not able to submit the form. Please try again.")
     } finally {
       setIsSubmitting(false)
     }
@@ -50,7 +91,8 @@ export default function ContactSection() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
           {/* Left side - Text */}
           <RevealSection className="text-left">
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-6">
+            {/* ... (text content remains the same) ... */}
+             <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-6">
               LET'S TALK ABOUT TRANSFORMING YOUR BUSINESS
             </h2>
             <p className="text-lg text-gray-300 mb-8">
@@ -77,12 +119,30 @@ export default function ContactSection() {
                     {error}
                   </div>
                 )}
-                <form onSubmit={handleSubmit} className="space-y-5">
+                {/* --- MODIFIED FORM TAG --- */}
+                <form
+                  name="contact" // Name for Netlify
+                  method="POST"
+                  data-netlify="true" // Enable Netlify forms
+                  data-netlify-honeypot="bot-field" // Enable Honeypot
+                  onSubmit={handleSubmit}
+                  className="space-y-5"
+                >
+                  {/* --- HONEYPOT FIELD (Hidden) --- */}
+                  <p className="hidden">
+                    <label>
+                      Don’t fill this out if you’re human: <input name="bot-field" onChange={handleChange} />
+                    </label>
+                  </p>
+                  {/* Required hidden input for Netlify when using JS/React */}
+                  <input type="hidden" name="form-name" value="contact" />
+
+                  {/* --- Your Form Fields (No changes needed here) --- */}
                   <div>
                     <input
                       type="text"
                       id="name"
-                      name="name"
+                      name="name" // IMPORTANT: Ensure all inputs have a 'name' attribute
                       value={formData.name}
                       onChange={handleChange}
                       required
@@ -94,7 +154,7 @@ export default function ContactSection() {
                     <input
                       type="email"
                       id="email"
-                      name="email"
+                      name="email" // IMPORTANT
                       value={formData.email}
                       onChange={handleChange}
                       required
@@ -106,10 +166,10 @@ export default function ContactSection() {
                     <input
                       type="text"
                       id="company"
-                      name="company"
+                      name="company" // IMPORTANT
                       value={formData.company}
                       onChange={handleChange}
-                      required
+                      required /* Changed optional to required as per original code */
                       className="w-full bg-transparent border-b border-gray-600 px-0 py-2 text-white placeholder-gray-400 focus:border-primary focus:outline-none transition-colors"
                       placeholder="Company"
                     />
@@ -117,7 +177,7 @@ export default function ContactSection() {
                   <div>
                     <textarea
                       id="message"
-                      name="message"
+                      name="message" // IMPORTANT
                       rows={4}
                       value={formData.message}
                       onChange={handleChange}
@@ -127,6 +187,7 @@ export default function ContactSection() {
                     ></textarea>
                   </div>
                   <div className="pt-6">
+                     {/* --- Submit Button (No changes needed here) --- */}
                     <button
                       type="submit"
                       disabled={isSubmitting}
@@ -134,27 +195,9 @@ export default function ContactSection() {
                     >
                       <span className="relative z-10 flex items-center justify-center">
                         {isSubmitting ? (
-                          <span className="flex items-center">
-                            <svg
-                              className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
-                              xmlns="http://www.w3.org/2000/svg"
-                              fill="none"
-                              viewBox="0 0 24 24"
-                            >
-                              <circle
-                                className="opacity-25"
-                                cx="12"
-                                cy="12"
-                                r="10"
-                                stroke="currentColor"
-                                strokeWidth="4"
-                              ></circle>
-                              <path
-                                className="opacity-75"
-                                fill="currentColor"
-                                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                              ></path>
-                            </svg>
+                         <span className="flex items-center">
+                           {/* ... (SVG spinner code) ... */}
+                            <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
                             SUBMITTING...
                           </span>
                         ) : (
