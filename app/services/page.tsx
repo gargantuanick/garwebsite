@@ -3,8 +3,23 @@
 import Link from "next/link"
 import Image from "next/image"
 import RevealSection from "@/components/reveal-section"
+import { useEffect } from "react"
+import { useSearchParams } from "next/navigation"
+import { scrollToElement } from "@/utils/scroll-utils"
 
 export default function ServicesPage() {
+  const searchParams = useSearchParams()
+
+  useEffect(() => {
+    // Get the hash from the URL (if any)
+    const hash = window.location.hash.replace("#", "")
+
+    if (hash) {
+      // If there's a hash in the URL, scroll to the corresponding element
+      scrollToElement(hash)
+    }
+  }, [searchParams])
+
   return (
     <>
       {/* Intelligent Data Mastery */}
@@ -65,7 +80,7 @@ export default function ServicesPage() {
       </RevealSection>
 
       {/* Cognitive System Engineering */}
-      <RevealSection id="cognitive-systems" className="min-h-screen flex items-center py-12 bg-black">
+      <RevealSection id="cognitive-system" className="min-h-screen flex items-center py-12 bg-black">
         <div className="container-custom">
           <div className="mb-8">
             <Link href="/" className="text-sm text-gray-400 hover:text-primary">

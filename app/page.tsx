@@ -122,7 +122,7 @@ export default function Home() {
             {/* Cognitive System Card */}
             <RevealSection className="group relative" delay={200}>
               <Link
-                href="/services#cognitive-systems"
+                href="/services#cognitive-system"
                 className="absolute inset-0 z-10"
                 aria-label="Learn more about Cognitive System Engineering"
               >
@@ -145,7 +145,7 @@ export default function Home() {
                   Elevate your business with bespoke AI systems and machine learning solutions.
                 </p>
                 <Link
-                  href="/services#cognitive-systems"
+                  href="/services#cognitive-system"
                   className="text-primary hover:underline inline-flex items-center mt-auto relative z-20"
                   onClick={(e) => e.stopPropagation()}
                 >

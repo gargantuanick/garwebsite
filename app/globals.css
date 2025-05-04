@@ -15,6 +15,11 @@ body {
 @layer base {
   body {
     @apply antialiased;
+    scroll-behavior: smooth;
+  }
+
+  html {
+    scroll-behavior: smooth;
   }
 }
 
