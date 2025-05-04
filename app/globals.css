@@ -20,6 +20,7 @@ body {
 
   html {
     scroll-behavior: smooth;
+    scroll-padding-top: 80px; /* Add padding for fixed header */
   }
 }
 
@@ -58,6 +59,10 @@ body {
 
   .form-input {
     @apply block w-full rounded-md border border-gray-600 bg-muted/20 px-4 py-3 text-foreground shadow-sm focus:border-primary focus:ring-primary transition-colors duration-200;
+  }
+
+  .scroll-mt-20 {
+    scroll-margin-top: 5rem;
   }
 }
 
