@@ -6,10 +6,28 @@ import RevealSection from "@/components/reveal-section"
 import { useEffect } from "react"
 
 export default function ServicesPage() {
-  // Add console logging to help debug
+  // Use window.location directly instead of useSearchParams
   useEffect(() => {
     console.log("Services page loaded")
     console.log("Current hash:", window.location.hash)
+
+    // Handle hash navigation
+    const hash = window.location.hash.replace("#", "")
+    if (hash) {
+      const element = document.getElementById(hash)
+      if (element) {
+        setTimeout(() => {
+          const headerHeight = 80
+          const elementPosition = element.getBoundingClientRect().top
+          const offsetPosition = elementPosition + window.pageYOffset - headerHeight
+
+          window.scrollTo({
+            top: offsetPosition,
+            behavior: "smooth",
+          })
+        }, 300)
+      }
+    }
 
     // Log all section IDs to verify they exist
     const sections = ["data-mastery", "cognitive-system", "ecosystem-architecture"]

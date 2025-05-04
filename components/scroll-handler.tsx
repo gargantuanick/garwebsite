@@ -1,12 +1,12 @@
 "use client"
 
 import { useEffect } from "react"
-import { useRouter, usePathname, useSearchParams } from "next/navigation"
+import { usePathname } from "next/navigation"
+import { Suspense } from "react"
 
-export default function ScrollHandler() {
-  const router = useRouter()
+// Separate component that uses useSearchParams
+function ScrollHandlerInner() {
   const pathname = usePathname()
-  const searchParams = useSearchParams()
 
   useEffect(() => {
     // Function to handle scrolling to the target element
@@ -49,7 +49,16 @@ export default function ScrollHandler() {
     return () => {
       window.removeEventListener("load", scrollToSection)
     }
-  }, [pathname, searchParams])
+  }, [pathname])
 
   return null
+}
+
+// Main component with Suspense boundary
+export default function ScrollHandler() {
+  return (
+    <Suspense fallback={null}>
+      <ScrollHandlerInner />
+    </Suspense>
+  )
 }
