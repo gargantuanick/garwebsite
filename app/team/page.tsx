@@ -1,6 +1,16 @@
 import Section from "@/components/section"
 import TeamMemberCard from "@/components/team-member-card"
 import Link from "next/link"
+import type { Metadata } from "next"
+
+export const metadata: Metadata = {
+  title: "Our Team",
+  description:
+    "Meet our team of industry leaders and innovators at Gargantua Group, experts in data analytics, AI, and technology consulting.",
+  alternates: {
+    canonical: "/team",
+  },
+}
 
 export default function TeamPage() {
   const teamMembers = [

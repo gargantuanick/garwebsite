@@ -1,3 +1,4 @@
+import type { Metadata } from "next"
 import { notFound } from "next/navigation"
 import Image from "next/image"
 import Link from "next/link"
@@ -48,6 +49,28 @@ const teamMembers = [
     imageSrc: "/images/team/david-lindelof.jpg",
   },
 ]
+
+export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
+  const teamMember = teamMembers.find((member) => member.slug === params.slug)
+
+  if (!teamMember) {
+    return {
+      title: "Team Member Not Found",
+      description: "The requested team member profile could not be found.",
+    }
+  }
+
+  return {
+    title: teamMember.name,
+    description: `${teamMember.name} - ${teamMember.role} at Gargantua Group. ${teamMember.shortBio || ""}`.substring(
+      0,
+      160,
+    ),
+    alternates: {
+      canonical: `/team/${teamMember.slug}`,
+    },
+  }
+}
 
 export default function TeamMemberPage({ params }: { params: { slug: string } }) {
   const teamMember = teamMembers.find((member) => member.slug === params.slug)
