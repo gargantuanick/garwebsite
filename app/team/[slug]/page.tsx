@@ -38,7 +38,7 @@ const teamMembers = [
     slug: "richard-zhang",
     name: "Richard Zhang PhD",
     role: "AI Research Scientist",
-    bio: "Research scientist at Google DeepMind and OSS Vizier co-creator, bringing expertise in hyperparameter optimization and theoretical machine learning to enterprise applications.",
+    bio: "Dr Richard Zhang is a distinguished research scientist at Google DeepMind and a principal technical consultant for Gargantua Group, where he leads the development of cutting edge machine learning optimization frameworks.\n\nAt Gargantua Group, he consults on enterprise-scale AI systems with a focus on hyperparameter tuning and neural architecture search, bringing theoretical advances to production environments.\n\nIn his role at DeepMind, he serves on the Vizier team as a co-creator of OSS Vizier, specializing in Bayesian calibration and theoretical machine learning.\n\nRichard earned his Ph.D. in Applied Mathematics and Computer Science from UC Berkeley, after completing his undergraduate studies at Princeton University. His research has been featured at prestigious venues including NeurIPS, ICML, and ICLR, with particular recognition for his work in hyperparameter optimization and AI fairness. His collaborative efforts with Gargantua Group have been instrumental in bridging the gap between theoretical machine learning advances and practical enterprise applications.",
     imageSrc: "/images/team/richard-zhang.jpg",
   },
   {
@@ -77,16 +77,16 @@ export default function TeamMemberPage({ params }: { params: { slug: string } })
   }
 
   // Define custom positioning for specific team members
-  const getImagePosition = (memberName: string) => {
+  const getImageStyle = (memberName: string) => {
     switch (memberName) {
       case "Nick Kim":
-        return "object-center object-[center_20%]" // Move image down 20%
+        return { objectPosition: "center 40%" } // Increased from 35% to 40%
       case "Richard Zhang PhD":
-        return "object-center object-[center_15%]" // Move image down 15%
+        return { objectPosition: "center 75%" } // Increased from 60% to 75%
       case "David Lindelöf PhD":
-        return "object-center object-[center_25%]" // Move image down 25%
+        return { objectPosition: "center 35%" } // Added positioning for David
       default:
-        return "object-center"
+        return { objectPosition: "center center" }
     }
   }
 
@@ -105,7 +105,8 @@ export default function TeamMemberPage({ params }: { params: { slug: string } })
                 alt={teamMember.name}
                 width={600}
                 height={600}
-                className={`w-full h-full ${getImagePosition(teamMember.name)}`}
+                className="object-cover w-full h-full"
+                style={getImageStyle(teamMember.name)}
                 priority
               />
             </div>

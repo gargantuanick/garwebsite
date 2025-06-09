@@ -11,16 +11,16 @@ interface TeamMemberCardProps {
 
 export default function TeamMemberCard({ name, role, shortBio, slug, imageSrc }: TeamMemberCardProps) {
   // Define custom positioning for specific team members
-  const getImagePosition = (memberName: string) => {
+  const getImageStyle = (memberName: string) => {
     switch (memberName) {
       case "Nick Kim":
-        return "object-center object-[center_20%]" // Move image down 20%
+        return { objectPosition: "center 40%" } // Increased from 35% to 40%
       case "Richard Zhang PhD":
-        return "object-center object-[center_15%]" // Move image down 15%
+        return { objectPosition: "center 75%" } // Increased from 60% to 75%
       case "David Lindelöf PhD":
-        return "object-center object-[center_25%]" // Move image down 25%
+        return { objectPosition: "center 35%" } // Added positioning for David
       default:
-        return "object-center"
+        return { objectPosition: "center center" }
     }
   }
 
@@ -32,7 +32,8 @@ export default function TeamMemberCard({ name, role, shortBio, slug, imageSrc }:
           alt={name}
           width={400}
           height={400}
-          className={`w-full h-full ${getImagePosition(name)}`}
+          className="object-cover w-full h-full"
+          style={getImageStyle(name)}
           priority
         />
       </div>
