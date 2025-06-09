@@ -62,10 +62,7 @@ export async function generateMetadata({ params }: { params: { slug: string } })
 
   return {
     title: teamMember.name,
-    description: `${teamMember.name} - ${teamMember.role} at Gargantua Group. ${teamMember.shortBio || ""}`.substring(
-      0,
-      160,
-    ),
+    description: `${teamMember.name} - ${teamMember.role} at Gargantua Group. ${teamMember.bio.substring(0, 100)}...`,
     alternates: {
       canonical: `/team/${teamMember.slug}`,
     },
@@ -77,6 +74,20 @@ export default function TeamMemberPage({ params }: { params: { slug: string } })
 
   if (!teamMember) {
     notFound()
+  }
+
+  // Define custom positioning for specific team members
+  const getImagePosition = (memberName: string) => {
+    switch (memberName) {
+      case "Nick Kim":
+        return "object-center object-[center_20%]" // Move image down 20%
+      case "Richard Zhang PhD":
+        return "object-center object-[center_15%]" // Move image down 15%
+      case "David Lindelöf PhD":
+        return "object-center object-[center_25%]" // Move image down 25%
+      default:
+        return "object-center"
+    }
   }
 
   return (
@@ -94,7 +105,7 @@ export default function TeamMemberPage({ params }: { params: { slug: string } })
                 alt={teamMember.name}
                 width={600}
                 height={600}
-                className="object-cover w-full h-full"
+                className={`w-full h-full ${getImagePosition(teamMember.name)}`}
                 priority
               />
             </div>
