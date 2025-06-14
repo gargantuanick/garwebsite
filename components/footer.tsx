@@ -2,6 +2,7 @@
 
 import type React from "react"
 import { useState } from "react"
+import Image from "next/image"
 import { ArrowRight } from "lucide-react"
 
 export default function Footer() {
@@ -32,7 +33,12 @@ export default function Footer() {
       <div className="container-custom">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12 mb-12">
           <div>
-            <h3 className="text-xl font-bold mb-6">GARGANTUA GROUP</h3>
+            <div className="flex items-center space-x-3 mb-6">
+              <div className="relative w-8 h-8 flex-shrink-0">
+                <Image src="/images/gargantua-logo.jpg" alt="Gargantua Group Logo" fill className="object-contain" />
+              </div>
+              <h3 className="text-xl font-bold">GARGANTUA GROUP</h3>
+            </div>
             <p className="text-foreground/70 max-w-md">
               Drawing from elite technology talent across worldwide innovation hubs, we help transform businesses
               through cutting-edge data and AI solutions. Gargantua turns technological potential into measurable

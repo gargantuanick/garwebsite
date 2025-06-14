@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react"
 import Link from "next/link"
+import Image from "next/image"
 import { usePathname } from "next/navigation"
 import { Menu, X } from "lucide-react"
 
@@ -33,7 +34,16 @@ export default function Header() {
       }`}
     >
       <div className="container-custom flex items-center justify-between">
-        <Link href="/" className="flex items-center">
+        <Link href="/" className="flex items-center space-x-3">
+          <div className="relative w-8 h-8 flex-shrink-0">
+            <Image
+              src="/images/gargantua-logo.jpg"
+              alt="Gargantua Group Logo"
+              fill
+              className="object-contain"
+              priority
+            />
+          </div>
           <span className="text-xl font-bold tracking-tight">GARGANTUA GROUP</span>
         </Link>
 
