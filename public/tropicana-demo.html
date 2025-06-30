@@ -1,0 +1,1892 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Market Alpha Research System - Enterprise UI Wireframe</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: #0a0a0a;
+            color: #e0e0e0;
+            font-size: 11px;
+            line-height: 1.4;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1920px;
+            margin: 0 auto;
+            background: #0f0f0f;
+        }
+
+        /* Header */
+        .header {
+            background: #1a1a1a;
+            border-bottom: 1px solid #2a2a2a;
+            padding: 8px 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo {
+            font-size: 16px;
+            font-weight: 600;
+            color: #00ff88;
+        }
+
+        .nav-tabs {
+            display: flex;
+            gap: 2px;
+        }
+
+        .nav-tab {
+            padding: 8px 16px;
+            background: #0f0f0f;
+            border: 1px solid #2a2a2a;
+            border-bottom: none;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .nav-tab.active {
+            background: #00ff88;
+            color: #000;
+            font-weight: 500;
+        }
+
+        .nav-tab:hover:not(.active) {
+            background: #1a1a1a;
+        }
+
+        /* Main Layout */
+        .main-content {
+            display: none;
+            height: calc(100vh - 50px);
+            overflow: hidden;
+        }
+
+        .main-content.active {
+            display: block;
+        }
+
+        /* Microlens View */
+        .microlens-container {
+            display: grid;
+            grid-template-columns: 1fr 400px;
+            height: 100%;
+        }
+
+        .map-section {
+            position: relative;
+            background: #050505;
+            border-right: 1px solid #2a2a2a;
+            overflow: hidden;
+        }
+
+        .map-controls {
+            position: absolute;
+            top: 16px;
+            left: 16px;
+            background: rgba(26, 26, 26, 0.95);
+            border: 1px solid #2a2a2a;
+            border-radius: 4px;
+            padding: 12px;
+            z-index: 100;
+        }
+
+        .control-group {
+            margin-bottom: 12px;
+        }
+
+        .control-group:last-child {
+            margin-bottom: 0;
+        }
+
+        .control-label {
+            font-size: 10px;
+            color: #888;
+            margin-bottom: 4px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .control-buttons {
+            display: flex;
+            gap: 4px;
+            flex-wrap: wrap;
+        }
+
+        .control-btn {
+            padding: 4px 8px;
+            background: #1a1a1a;
+            border: 1px solid #333;
+            color: #e0e0e0;
+            font-size: 10px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .control-btn.active {
+            background: #00ff88;
+            color: #000;
+            border-color: #00ff88;
+        }
+
+        .control-btn:hover:not(.active) {
+            background: #2a2a2a;
+        }
+
+        /* Map Container */
+        .map-container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            background: #0a0a0a;
+            overflow: hidden;
+        }
+
+        .malaysia-map {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 90%;
+            height: 90%;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600"><path d="M200 250 Q 300 200, 400 250 T 600 300 L 650 350 Q 600 400, 500 380 L 450 400 Q 350 380, 250 350 Z" fill="%23111" stroke="%23333" stroke-width="1"/><path d="M100 400 Q 150 380, 200 400 L 250 450 Q 200 480, 150 460 Z" fill="%23111" stroke="%23333" stroke-width="1"/><text x="400" y="300" fill="%23666" font-size="12" text-anchor="middle">KUALA LUMPUR</text><text x="200" y="430" fill="%23666" font-size="10" text-anchor="middle">PENANG</text></svg>') no-repeat center;
+            background-size: contain;
+        }
+
+        /* Hexagonal Overlay */
+        .hex-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        .hex-cell {
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+            cursor: pointer;
+            pointer-events: all;
+            transition: all 0.2s;
+        }
+
+        .hex-cell:hover {
+            transform: scale(1.2);
+            z-index: 10;
+        }
+
+        .hex-heat-1 { background: rgba(0, 255, 136, 0.2); }
+        .hex-heat-2 { background: rgba(0, 255, 136, 0.4); }
+        .hex-heat-3 { background: rgba(255, 200, 0, 0.4); }
+        .hex-heat-4 { background: rgba(255, 100, 0, 0.5); }
+        .hex-heat-5 { background: rgba(255, 0, 100, 0.6); }
+
+        /* Data Tooltip */
+        .hex-tooltip {
+            position: absolute;
+            background: rgba(26, 26, 26, 0.98);
+            border: 1px solid #00ff88;
+            border-radius: 4px;
+            padding: 8px;
+            font-size: 10px;
+            pointer-events: none;
+            z-index: 1000;
+            min-width: 200px;
+        }
+
+        .tooltip-header {
+            color: #00ff88;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .tooltip-data {
+            display: grid;
+            gap: 2px;
+        }
+
+        .tooltip-item {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .tooltip-label {
+            color: #888;
+        }
+
+        .tooltip-value {
+            color: #fff;
+            font-weight: 500;
+        }
+
+        /* Data Panel */
+        .data-panel {
+            background: #0a0a0a;
+            padding: 16px;
+            overflow-y: auto;
+            height: 100%;
+        }
+
+        .panel-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 16px;
+        }
+
+        .panel-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #00ff88;
+        }
+
+        .drill-controls {
+            display: flex;
+            gap: 4px;
+        }
+
+        .drill-btn {
+            padding: 4px 8px;
+            background: #1a1a1a;
+            border: 1px solid #333;
+            color: #888;
+            font-size: 9px;
+            cursor: pointer;
+        }
+
+        .drill-btn.active {
+            background: #00ff88;
+            color: #000;
+        }
+
+        /* Expandable Data Sections */
+        .data-section {
+            margin-bottom: 16px;
+            border: 1px solid #1a1a1a;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px;
+            background: #1a1a1a;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .section-header:hover {
+            background: #222;
+        }
+
+        .section-title {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .expand-icon {
+            width: 12px;
+            height: 12px;
+            background: #333;
+            transition: transform 0.2s;
+        }
+
+        .section-header.expanded .expand-icon {
+            transform: rotate(90deg);
+        }
+
+        .section-summary {
+            font-size: 12px;
+            font-weight: 600;
+            color: #00ff88;
+        }
+
+        .section-count {
+            font-size: 10px;
+            color: #888;
+        }
+
+        .section-content {
+            display: none;
+            padding: 12px;
+            background: #050505;
+        }
+
+        .section-content.show {
+            display: block;
+        }
+
+        /* Detailed Data Grid */
+        .detail-grid {
+            display: grid;
+            gap: 8px;
+        }
+
+        .detail-item {
+            padding: 8px;
+            background: #0a0a0a;
+            border: 1px solid #1a1a1a;
+            border-radius: 4px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .detail-info {
+            flex: 1;
+        }
+
+        .detail-name {
+            font-size: 11px;
+            color: #e0e0e0;
+            margin-bottom: 2px;
+        }
+
+        .detail-meta {
+            font-size: 9px;
+            color: #666;
+        }
+
+        .detail-value {
+            text-align: right;
+        }
+
+        .detail-number {
+            font-size: 14px;
+            font-weight: 600;
+            color: #00ff88;
+        }
+
+        .detail-change {
+            font-size: 9px;
+            margin-top: 2px;
+        }
+
+        .change-positive {
+            color: #00ff88;
+        }
+
+        .change-negative {
+            color: #ff4444;
+        }
+
+        /* Source Tags */
+        .source-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 4px;
+            margin-top: 8px;
+        }
+
+        .source-tag {
+            padding: 2px 6px;
+            background: #1a1a1a;
+            border: 1px solid #333;
+            border-radius: 2px;
+            font-size: 8px;
+            color: #888;
+        }
+
+        /* AI Research Partner */
+        .research-container {
+            display: grid;
+            grid-template-columns: 300px 1fr 350px;
+            height: 100%;
+        }
+
+        .research-tree {
+            background: #0a0a0a;
+            border-right: 1px solid #2a2a2a;
+            padding: 16px;
+            overflow-y: auto;
+        }
+
+        .tree-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 16px;
+        }
+
+        .tree-title {
+            font-size: 12px;
+            font-weight: 600;
+            color: #00ff88;
+        }
+
+        .tree-actions {
+            display: flex;
+            gap: 4px;
+        }
+
+        .tree-action {
+            padding: 2px 6px;
+            background: #1a1a1a;
+            border: 1px solid #333;
+            font-size: 9px;
+            cursor: pointer;
+        }
+
+        .tree-node {
+            margin-bottom: 8px;
+            cursor: pointer;
+        }
+
+        .tree-node-content {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px;
+            background: #1a1a1a;
+            border: 1px solid #2a2a2a;
+            border-radius: 4px;
+            transition: all 0.2s;
+        }
+
+        .tree-node-content:hover {
+            background: #222;
+            border-color: #00ff88;
+        }
+
+        .tree-node.active .tree-node-content {
+            background: #00ff88;
+            color: #000;
+        }
+
+        .tree-icon {
+            width: 16px;
+            height: 16px;
+            background: #333;
+            border-radius: 2px;
+        }
+
+        .tree-status {
+            margin-left: auto;
+            font-size: 9px;
+        }
+
+        .status-pending { color: #888; }
+        .status-active { color: #ffaa00; }
+        .status-complete { color: #00ff88; }
+
+        .tree-children {
+            margin-left: 24px;
+            margin-top: 8px;
+        }
+
+        /* Research Main Area */
+        .research-main {
+            background: #050505;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .research-header {
+            background: #1a1a1a;
+            padding: 16px;
+            border-bottom: 1px solid #2a2a2a;
+        }
+
+        .research-controls {
+            display: flex;
+            gap: 8px;
+            margin-top: 8px;
+        }
+
+        .research-btn {
+            padding: 6px 12px;
+            background: #0f0f0f;
+            border: 1px solid #333;
+            color: #e0e0e0;
+            font-size: 10px;
+            cursor: pointer;
+        }
+
+        .research-btn.primary {
+            background: #00ff88;
+            color: #000;
+            border-color: #00ff88;
+        }
+
+        .research-content {
+            flex: 1;
+            padding: 16px;
+            overflow-y: auto;
+        }
+
+        /* Data Summary Card */
+        .data-summary-card {
+            background: #0a0a0a;
+            border: 1px solid #1a1a1a;
+            border-radius: 4px;
+            padding: 16px;
+            margin-bottom: 16px;
+        }
+
+        .summary-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 12px;
+        }
+
+        .summary-title {
+            font-size: 12px;
+            font-weight: 600;
+            color: #00ff88;
+        }
+
+        .summary-actions {
+            display: flex;
+            gap: 4px;
+        }
+
+        .summary-action {
+            padding: 4px 8px;
+            background: #1a1a1a;
+            border: 1px solid #333;
+            font-size: 9px;
+            cursor: pointer;
+        }
+
+        .summary-stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 18px;
+            font-weight: 600;
+            color: #00ff88;
+        }
+
+        .stat-label {
+            font-size: 9px;
+            color: #888;
+            margin-top: 2px;
+        }
+
+        /* Data Table */
+        .data-table {
+            width: 100%;
+            font-size: 10px;
+        }
+
+        .data-table th {
+            padding: 8px;
+            background: #1a1a1a;
+            color: #888;
+            text-align: left;
+            font-weight: 500;
+            text-transform: uppercase;
+            font-size: 9px;
+        }
+
+        .data-table td {
+            padding: 8px;
+            border-bottom: 1px solid #1a1a1a;
+        }
+
+        .data-table tr:hover td {
+            background: #0f0f0f;
+        }
+
+        .table-tag {
+            display: inline-block;
+            padding: 2px 6px;
+            background: #1a1a1a;
+            border-radius: 2px;
+            font-size: 9px;
+            margin-right: 4px;
+        }
+
+        /* Scratchpad */
+        .scratchpad {
+            background: #0a0a0a;
+            border-left: 1px solid #2a2a2a;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .scratchpad-header {
+            padding: 16px;
+            border-bottom: 1px solid #2a2a2a;
+        }
+
+        .scratchpad-tabs {
+            display: flex;
+            gap: 8px;
+            margin-top: 8px;
+        }
+
+        .scratchpad-tab {
+            padding: 4px 8px;
+            background: #1a1a1a;
+            border: 1px solid #333;
+            font-size: 10px;
+            cursor: pointer;
+        }
+
+        .scratchpad-tab.active {
+            background: #00ff88;
+            color: #000;
+        }
+
+        .scratchpad-content {
+            flex: 1;
+            padding: 16px;
+            overflow-y: auto;
+        }
+
+        .note-entry {
+            margin-bottom: 16px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid #1a1a1a;
+        }
+
+        .note-meta {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 8px;
+        }
+
+        .note-author {
+            font-size: 10px;
+            font-weight: 600;
+        }
+
+        .note-author.human { color: #00aaff; }
+        .note-author.ai { color: #00ff88; }
+
+        .note-time {
+            font-size: 9px;
+            color: #666;
+        }
+
+        /* Knowledge Base */
+        .knowledge-container {
+            display: grid;
+            grid-template-columns: 300px 1fr 350px;
+            height: 100%;
+        }
+
+        .kb-sidebar {
+            background: #0a0a0a;
+            border-right: 1px solid #2a2a2a;
+            padding: 16px;
+            overflow-y: auto;
+        }
+
+        .kb-search {
+            width: 100%;
+            padding: 8px;
+            background: #1a1a1a;
+            border: 1px solid #333;
+            color: #e0e0e0;
+            font-size: 11px;
+            margin-bottom: 16px;
+        }
+
+        .kb-query {
+            width: 100%;
+            padding: 12px;
+            background: #1a1a1a;
+            border: 1px solid #00ff88;
+            color: #e0e0e0;
+            font-size: 12px;
+            margin-bottom: 16px;
+            border-radius: 4px;
+        }
+
+        .kb-query::placeholder {
+            color: #666;
+        }
+
+        /* Graph View */
+        .graph-view {
+            background: #050505;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .graph-controls {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            background: rgba(26, 26, 26, 0.95);
+            border: 1px solid #2a2a2a;
+            border-radius: 4px;
+            padding: 8px;
+            z-index: 100;
+        }
+
+        .graph-svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        .node {
+            cursor: pointer;
+        }
+
+        .node:hover circle {
+            stroke: #00ff88;
+            stroke-width: 3;
+        }
+
+        .node.selected circle {
+            fill: #00ff88;
+        }
+
+        .node.selected text {
+            fill: #000;
+        }
+
+        .link {
+            stroke: #333;
+            stroke-opacity: 0.6;
+            fill: none;
+        }
+
+        .link.highlighted {
+            stroke: #00ff88;
+            stroke-width: 2;
+            stroke-opacity: 1;
+        }
+
+        /* Loading States */
+        .loading {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px;
+            background: #1a1a1a;
+            border-radius: 4px;
+        }
+
+        .loading-spinner {
+            width: 12px;
+            height: 12px;
+            border: 2px solid #333;
+            border-top-color: #00ff88;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <div class="logo">MARKET ALPHA SYSTEM</div>
+            <div class="nav-tabs">
+                <div class="nav-tab active" onclick="showTab('microlens')">MICROLENS</div>
+                <div class="nav-tab" onclick="showTab('research')">AI RESEARCH PARTNER</div>
+                <div class="nav-tab" onclick="showTab('knowledge')">KNOWLEDGE BASE</div>
+            </div>
+            <div style="display: flex; gap: 16px; align-items: center;">
+                <span style="color: #666; font-size: 10px;">TROPICANA CORP</span>
+                <span style="color: #00ff88; font-size: 10px;">● LIVE</span>
+            </div>
+        </header>
+
+        <!-- Microlens View -->
+        <div id="microlens" class="main-content active">
+            <div class="microlens-container">
+                <div class="map-section">
+                    <div class="map-controls">
+                        <div class="control-group">
+                            <div class="control-label">TIME RANGE</div>
+                            <div class="control-buttons">
+                                <button class="control-btn">1D</button>
+                                <button class="control-btn">1W</button>
+                                <button class="control-btn">1M</button>
+                                <button class="control-btn active">3M</button>
+                                <button class="control-btn">6M</button>
+                                <button class="control-btn">1Y</button>
+                                <button class="control-btn">ALL</button>
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <div class="control-label">DATA LAYERS</div>
+                            <div class="control-buttons">
+                                <button class="control-btn active">PROPERTY</button>
+                                <button class="control-btn active">SOCIAL</button>
+                                <button class="control-btn active">ECONOMIC</button>
+                                <button class="control-btn">TRANSPORT</button>
+                                <button class="control-btn active">TALENT</button>
+                                <button class="control-btn">INFRA</button>
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <div class="control-label">PRECISION</div>
+                            <div class="control-buttons">
+                                <button class="control-btn">DISTRICT</button>
+                                <button class="control-btn active">POSTCODE</button>
+                                <button class="control-btn">H3-7</button>
+                                <button class="control-btn">H3-8</button>
+                                <button class="control-btn">H3-9</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="map-container">
+                        <div class="malaysia-map"></div>
+                        <div class="hex-overlay">
+                            <!-- Mont Kiara cluster -->
+                            <div class="hex-cell hex-heat-5" style="top: 48%; left: 51%;" data-location="Mont Kiara"></div>
+                            <div class="hex-cell hex-heat-4" style="top: 47%; left: 53%;"></div>
+                            <div class="hex-cell hex-heat-4" style="top: 50%; left: 52%;"></div>
+                            <div class="hex-cell hex-heat-3" style="top: 46%; left: 50%;"></div>
+
+                            <!-- Bangsar cluster -->
+                            <div class="hex-cell hex-heat-4" style="top: 52%; left: 50%;"></div>
+                            <div class="hex-cell hex-heat-3" style="top: 54%; left: 49%;"></div>
+
+                            <!-- KLCC cluster -->
+                            <div class="hex-cell hex-heat-5" style="top: 50%; left: 54%;"></div>
+                            <div class="hex-cell hex-heat-5" style="top: 49%; left: 56%;"></div>
+
+                            <!-- Petaling Jaya -->
+                            <div class="hex-cell hex-heat-3" style="top: 51%; left: 47%;"></div>
+                            <div class="hex-cell hex-heat-2" style="top: 53%; left: 46%;"></div>
+
+                            <!-- Cyberjaya -->
+                            <div class="hex-cell hex-heat-3" style="top: 58%; left: 53%;"></div>
+                            <div class="hex-cell hex-heat-2" style="top: 60%; left: 52%;"></div>
+
+                            <!-- Penang -->
+                            <div class="hex-cell hex-heat-3" style="top: 25%; left: 40%;"></div>
+                            <div class="hex-cell hex-heat-2" style="top: 27%; left: 39%;"></div>
+                        </div>
+
+                        <!-- Sample tooltip -->
+                        <div class="hex-tooltip" style="top: 45%; left: 55%; display: none;">
+                            <div class="tooltip-header">Mont Kiara - H3:8843ad1</div>
+                            <div class="tooltip-data">
+                                <div class="tooltip-item">
+                                    <span class="tooltip-label">Properties:</span>
+                                    <span class="tooltip-value">1,247</span>
+                                </div>
+                                <div class="tooltip-item">
+                                    <span class="tooltip-label">Avg Price:</span>
+                                    <span class="tooltip-value">RM 850K</span>
+                                </div>
+                                <div class="tooltip-item">
+                                    <span class="tooltip-label">Social Activity:</span>
+                                    <span class="tooltip-value">Very High</span>
+                                </div>
+                                <div class="tooltip-item">
+                                    <span class="tooltip-label">Businesses:</span>
+                                    <span class="tooltip-value">342</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="data-panel">
+                    <div class="panel-header">
+                        <div class="panel-title">MONT KIARA - DETAILED VIEW</div>
+                        <div class="drill-controls">
+                            <button class="drill-btn">SUMMARY</button>
+                            <button class="drill-btn active">DETAILED</button>
+                            <button class="drill-btn">RAW DATA</button>
+                        </div>
+                    </div>
+
+                    <!-- Property Data Section -->
+                    <div class="data-section">
+                        <div class="section-header expanded" onclick="toggleSection(this)">
+                            <div class="section-title">
+                                <div class="expand-icon">▶</div>
+                                <span class="section-summary">PROPERTY DATA</span>
+                            </div>
+                            <div>
+                                <span class="section-count">1,247 properties</span>
+                            </div>
+                        </div>
+                        <div class="section-content show">
+                            <div class="detail-grid">
+                                <div class="detail-item">
+                                    <div class="detail-info">
+                                        <div class="detail-name">High-Rise Condominiums</div>
+                                        <div class="detail-meta">3-4 bedrooms, >2000 sqft</div>
+                                    </div>
+                                    <div class="detail-value">
+                                        <div class="detail-number">423</div>
+                                        <div class="detail-change change-positive">↑ 12%</div>
+                                    </div>
+                                </div>
+                                <div class="detail-item">
+                                    <div class="detail-info">
+                                        <div class="detail-name">Service Apartments</div>
+                                        <div class="detail-meta">Studio - 2 bedrooms</div>
+                                    </div>
+                                    <div class="detail-value">
+                                        <div class="detail-number">567</div>
+                                        <div class="detail-change change-positive">↑ 8%</div>
+                                    </div>
+                                </div>
+                                <div class="detail-item">
+                                    <div class="detail-info">
+                                        <div class="detail-name">Luxury Penthouses</div>
+                                        <div class="detail-meta">>5000 sqft, private lift</div>
+                                    </div>
+                                    <div class="detail-value">
+                                        <div class="detail-number">45</div>
+                                        <div class="detail-change change-negative">↓ 5%</div>
+                                    </div>
+                                </div>
+                                <div class="detail-item">
+                                    <div class="detail-info">
+                                        <div class="detail-name">SOHO Units</div>
+                                        <div class="detail-meta">Mixed commercial-residential</div>
+                                    </div>
+                                    <div class="detail-value">
+                                        <div class="detail-number">89</div>
+                                        <div class="detail-change change-positive">↑ 23%</div>
+                                    </div>
+                                </div>
+                                <div class="detail-item">
+                                    <div class="detail-info">
+                                        <div class="detail-name">Landed Properties</div>
+                                        <div class="detail-meta">Terrace, Semi-D, Bungalow</div>
+                                    </div>
+                                    <div class="detail-value">
+                                        <div class="detail-number">123</div>
+                                        <div class="detail-change change-positive">↑ 3%</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="source-tags">
+                                <span class="source-tag">iProperty API</span>
+                                <span class="source-tag">PropertyGuru API</span>
+                                <span class="source-tag">EdgeProp Database</span>
+                                <span class="source-tag">JPPH Gov Data</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Business Data Section -->
+                    <div class="data-section">
+                        <div class="section-header" onclick="toggleSection(this)">
+                            <div class="section-title">
+                                <div class="expand-icon">▶</div>
+                                <span class="section-summary">BUSINESS ECOSYSTEM</span>
+                            </div>
+                            <div>
+                                <span class="section-count">342 active businesses</span>
+                            </div>
+                        </div>
+                        <div class="section-content">
+                            <div class="detail-grid">
+                                <div class="detail-item">
+                                    <div class="detail-info">
+                                        <div class="detail-name">F&B Establishments</div>
+                                        <div class="detail-meta">Cafes, restaurants, bars</div>
+                                    </div>
+                                    <div class="detail-value">
+                                        <div class="detail-number">124</div>
+                                        <div class="detail-change change-positive">↑ 18%</div>
+                                    </div>
+                                </div>
+                                <div class="detail-item">
+                                    <div class="detail-info">
+                                        <div class="detail-name">Tech Companies</div>
+                                        <div class="detail-meta">Startups, software dev, fintech</div>
+                                    </div>
+                                    <div class="detail-value">
+                                        <div class="detail-number">67</div>
+                                        <div class="detail-change change-positive">↑ 34%</div>
+                                    </div>
+                                </div>
+                                <div class="detail-item">
+                                    <div class="detail-info">
+                                        <div class="detail-name">Wellness & Fitness</div>
+                                        <div class="detail-meta">Gyms, yoga, spas, clinics</div>
+                                    </div>
+                                    <div class="detail-value">
+                                        <div class="detail-number">43</div>
+                                        <div class="detail-change change-positive">↑ 27%</div>
+                                    </div>
+                                </div>
+                                <div class="detail-item">
+                                    <div class="detail-info">
+                                        <div class="detail-name">Co-working Spaces</div>
+                                        <div class="detail-meta">WeWork, Common Ground, etc</div>
+                                    </div>
+                                    <div class="detail-value">
+                                        <div class="detail-number">12</div>
+                                        <div class="detail-change change-positive">↑ 50%</div>
+                                    </div>
+                                </div>
+                                <div class="detail-item">
+                                    <div class="detail-info">
+                                        <div class="detail-name">International Schools</div>
+                                        <div class="detail-meta">Primary & secondary education</div>
+                                    </div>
+                                    <div class="detail-value">
+                                        <div class="detail-number">8</div>
+                                        <div class="detail-change">→ 0%</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="source-tags">
+                                <span class="source-tag">SSM Business Registry</span>
+                                <span class="source-tag">Google Places API</span>
+                                <span class="source-tag">Foursquare API</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Talent Pool Section -->
+                    <div class="data-section">
+                        <div class="section-header" onclick="toggleSection(this)">
+                            <div class="section-title">
+                                <div class="expand-icon">▶</div>
+                                <span class="section-summary">TALENT POOL ANALYSIS</span>
+                            </div>
+                            <div>
+                                <span class="section-count">12,847 professionals</span>
+                            </div>
+                        </div>
+                        <div class="section-content">
+                            <div class="detail-grid">
+                                <div class="detail-item">
+                                    <div class="detail-info">
+                                        <div class="detail-name">Software Engineers</div>
+                                        <div class="detail-meta">Frontend, backend, full-stack, DevOps</div>
+                                    </div>
+                                    <div class="detail-value">
+                                        <div class="detail-number">3,241</div>
+                                        <div class="detail-change change-positive">↑ 22%</div>
+                                    </div>
+                                </div>
+                                <div class="detail-item">
+                                    <div class="detail-info">
+                                        <div class="detail-name">Product Managers</div>
+                                        <div class="detail-meta">Tech PM, Senior PM, VP Product</div>
+                                    </div>
+                                    <div class="detail-value">
+                                        <div class="detail-number">892</div>
+                                        <div class="detail-change change-positive">↑ 31%</div>
+                                    </div>
+                                </div>
+                                <div class="detail-item">
+                                    <div class="detail-info">
+                                        <div class="detail-name">Data Scientists</div>
+                                        <div class="detail-meta">ML Engineers, Data Analysts</div>
+                                    </div>
+                                    <div class="detail-value">
+                                        <div class="detail-number">1,456</div>
+                                        <div class="detail-change change-positive">↑ 45%</div>
+                                    </div>
+                                </div>
+                                <div class="detail-item">
+                                    <div class="detail-info">
+                                        <div class="detail-name">Finance Professionals</div>
+                                        <div class="detail-meta">Investment banking, PE, VC</div>
+                                    </div>
+                                    <div class="detail-value">
+                                        <div class="detail-number">2,134</div>
+                                        <div class="detail-change change-positive">↑ 15%</div>
+                                    </div>
+                                </div>
+                                <div class="detail-item">
+                                    <div class="detail-info">
+                                        <div class="detail-name">Creative Industry</div>
+                                        <div class="detail-meta">Designers, content creators, marketing</div>
+                                    </div>
+                                    <div class="detail-value">
+                                        <div class="detail-number">1,789</div>
+                                        <div class="detail-change change-positive">↑ 19%</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="source-tags">
+                                <span class="source-tag">LinkedIn Jobs API</span>
+                                <span class="source-tag">JobStreet API</span>
+                                <span class="source-tag">Glassdoor API</span>
+                                <span class="source-tag">Indeed API</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Social Sentiment Section -->
+                    <div class="data-section">
+                        <div class="section-header" onclick="toggleSection(this)">
+                            <div class="section-title">
+                                <div class="expand-icon">▶</div>
+                                <span class="section-summary">SOCIAL SENTIMENT BREAKDOWN</span>
+                            </div>
+                            <div>
+                                <span class="section-count">23,456 posts analyzed</span>
+                            </div>
+                        </div>
+                        <div class="section-content">
+                            <div class="detail-grid">
+                                <div class="detail-item">
+                                    <div class="detail-info">
+                                        <div class="detail-name">Lifestyle & Wellness Posts</div>
+                                        <div class="detail-meta">#fitness #yoga #healthyliving</div>
+                                    </div>
+                                    <div class="detail-value">
+                                        <div class="detail-number">8,234</div>
+                                        <div class="detail-change change-positive">72% positive</div>
+                                    </div>
+                                </div>
+                                <div class="detail-item">
+                                    <div class="detail-info">
+                                        <div class="detail-name">F&B Experiences</div>
+                                        <div class="detail-meta">Restaurant reviews, cafe posts</div>
+                                    </div>
+                                    <div class="detail-value">
+                                        <div class="detail-number">6,123</div>
+                                        <div class="detail-change change-positive">68% positive</div>
+                                    </div>
+                                </div>
+                                <div class="detail-item">
+                                    <div class="detail-info">
+                                        <div class="detail-name">Property Reviews</div>
+                                        <div class="detail-meta">Resident feedback, amenity mentions</div>
+                                    </div>
+                                    <div class="detail-value">
+                                        <div class="detail-number">3,456</div>
+                                        <div class="detail-change change-positive">81% positive</div>
+                                    </div>
+                                </div>
+                                <div class="detail-item">
+                                    <div class="detail-info">
+                                        <div class="detail-name">Traffic & Transport</div>
+                                        <div class="detail-meta">Congestion, parking, connectivity</div>
+                                    </div>
+                                    <div class="detail-value">
+                                        <div class="detail-number">2,891</div>
+                                        <div class="detail-change change-negative">42% positive</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="source-tags">
+                                <span class="source-tag">Instagram API</span>
+                                <span class="source-tag">X (Twitter) API</span>
+                                <span class="source-tag">Facebook API</span>
+                                <span class="source-tag">Reddit API</span>
+                                <span class="source-tag">TikTok API</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- AI Research Partner -->
+        <div id="research" class="main-content">
+            <div class="research-container">
+                <div class="research-tree">
+                    <div class="tree-header">
+                        <div class="tree-title">RESEARCH PLAN</div>
+                        <div class="tree-actions">
+                            <button class="tree-action">SAVE</button>
+                            <button class="tree-action">EXPORT</button>
+                        </div>
+                    </div>
+                    <div class="tree-node">
+                        <div class="tree-node-content">
+                            <div class="tree-icon"></div>
+                            <span>Wellness Amenity Preference Analysis</span>
+                            <span class="tree-status status-complete">✓</span>
+                        </div>
+                        <div class="tree-children">
+                            <div class="tree-node">
+                                <div class="tree-node-content">
+                                    <div class="tree-icon"></div>
+                                    <span>Social Media Sentiment</span>
+                                    <span class="tree-status status-complete">✓</span>
+                                </div>
+                            </div>
+                            <div class="tree-node active">
+                                <div class="tree-node-content">
+                                    <div class="tree-icon"></div>
+                                    <span>Property Transaction Analysis</span>
+                                    <span class="tree-status status-active">●</span>
+                                </div>
+                                <div class="tree-children">
+                                    <div class="tree-node">
+                                        <div class="tree-node-content">
+                                            <div class="tree-icon"></div>
+                                            <span>Premium vs Standard Units</span>
+                                            <span class="tree-status status-pending">○</span>
+                                        </div>
+                                    </div>
+                                    <div class="tree-node">
+                                        <div class="tree-node-content">
+                                            <div class="tree-icon"></div>
+                                            <span>Amenity Correlation</span>
+                                            <span class="tree-status status-pending">○</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tree-node">
+                                <div class="tree-node-content">
+                                    <div class="tree-icon"></div>
+                                    <span>Competitor Analysis</span>
+                                    <span class="tree-status status-pending">○</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tree-node">
+                        <div class="tree-node-content">
+                            <div class="tree-icon"></div>
+                            <span>[BRANCH] Co-working Space Demand</span>
+                            <span class="tree-status status-complete">✓</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="research-main">
+                    <div class="research-header">
+                        <div style="font-size: 14px; font-weight: 600;">Young Professionals Wellness Amenity Preferences - Mont Kiara</div>
+                        <div class="research-controls">
+                            <button class="research-btn">MODIFY PLAN</button>
+                            <button class="research-btn">BRANCH</button>
+                            <button class="research-btn">MERGE</button>
+                            <button class="research-btn primary">EXECUTE NEXT</button>
+                        </div>
+                    </div>
+
+                    <div class="research-content">
+                        <!-- Data Summary Card -->
+                        <div class="data-summary-card">
+                            <div class="summary-header">
+                                <div class="summary-title">STEP 2: PROPERTY TRANSACTION DATA RETRIEVED</div>
+                                <div class="summary-actions">
+                                    <button class="summary-action">FILTER</button>
+                                    <button class="summary-action">EXPORT</button>
+                                    <button class="summary-action">VISUALIZE</button>
+                                </div>
+                            </div>
+
+                            <div class="summary-stats">
+                                <div class="stat-item">
+                                    <div class="stat-value">1,847</div>
+                                    <div class="stat-label">TOTAL TRANSACTIONS</div>
+                                </div>
+                                <div class="stat-item">
+                                    <div class="stat-value">RM 2.8M</div>
+                                    <div class="stat-label">AVG TRANSACTION</div>
+                                </div>
+                                <div class="stat-item">
+                                    <div class="stat-value">67%</div>
+                                    <div class="stat-label">WITH GYM/POOL</div>
+                                </div>
+                                <div class="stat-item">
+                                    <div class="stat-value">23 days</div>
+                                    <div class="stat-label">AVG TIME TO SELL</div>
+                                </div>
+                            </div>
+
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>Property</th>
+                                        <th>Type</th>
+                                        <th>Price</th>
+                                        <th>Amenities</th>
+                                        <th>Days on Market</th>
+                                        <th>Buyer Profile</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Verve Suites</td>
+                                        <td>3BR Condo</td>
+                                        <td>RM 1.2M</td>
+                                        <td>
+                                            <span class="table-tag">24/7 Gym</span>
+                                            <span class="table-tag">Infinity Pool</span>
+                                            <span class="table-tag">Co-work</span>
+                                        </td>
+                                        <td>12</td>
+                                        <td>Tech Professional, 32</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Arte Mont Kiara</td>
+                                        <td>2BR Service Apt</td>
+                                        <td>RM 850K</td>
+                                        <td>
+                                            <span class="table-tag">Gym</span>
+                                            <span class="table-tag">Pool</span>
+                                            <span class="table-tag">Sauna</span>
+                                        </td>
+                                        <td>18</td>
+                                        <td>Finance Manager, 28</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Solaris Dutamas</td>
+                                        <td>Studio SOHO</td>
+                                        <td>RM 450K</td>
+                                        <td>
+                                            <span class="table-tag">Gym</span>
+                                            <span class="table-tag">Co-work</span>
+                                        </td>
+                                        <td>8</td>
+                                        <td>Startup Founder, 26</td>
+                                    </tr>
+                                    <tr>
+                                        <td>11 Mont Kiara</td>
+                                        <td>4BR Penthouse</td>
+                                        <td>RM 4.5M</td>
+                                        <td>
+                                            <span class="table-tag">Private Gym</span>
+                                            <span class="table-tag">Pool</span>
+                                            <span class="table-tag">Sky Lounge</span>
+                                        </td>
+                                        <td>45</td>
+                                        <td>CEO, 45</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                            <div class="source-tags" style="margin-top: 12px;">
+                                <span class="source-tag">iProperty Transaction API - 847 records</span>
+                                <span class="source-tag">PropertyGuru Sales Data - 523 records</span>
+                                <span class="source-tag">Internal CRM - 477 matched buyers</span>
+                            </div>
+                        </div>
+
+                        <!-- AI Analysis -->
+                        <div class="data-summary-card">
+                            <div class="summary-header">
+                                <div class="summary-title">AI ANALYSIS: AMENITY IMPACT ON SALES VELOCITY</div>
+                                <div class="summary-actions">
+                                    <button class="summary-action">REGENERATE</button>
+                                    <button class="summary-action">SAVE</button>
+                                </div>
+                            </div>
+
+                            <div style="padding: 16px; line-height: 1.8; color: #e0e0e0;">
+                                <p style="margin-bottom: 12px;">
+                                    <strong style="color: #00ff88;">Key Finding:</strong> Properties with integrated wellness amenities show significantly faster sales velocity. Units with 24/7 gym access sold 42% faster (avg 14 days) compared to those without (avg 24 days).
+                                </p>
+
+                                <p style="margin-bottom: 12px;">
+                                    <strong style="color: #00ff88;">Co-working Correlation:</strong> The presence of co-working spaces within residential complexes emerged as the strongest predictor of rapid sales among young professionals (25-35 age group). Properties with dedicated co-working areas achieved:
+                                </p>
+
+                                <ul style="margin-left: 20px; margin-bottom: 12px;">
+                                    <li>67% faster sales velocity</li>
+                                    <li>12% price premium over comparable units</li>
+                                    <li>89% buyer satisfaction rate (post-purchase survey)</li>
+                                </ul>
+
+                                <p style="margin-bottom: 12px;">
+                                    <strong style="color: #00ff88;">Buyer Profile Insights:</strong> Analysis of 477 matched buyer profiles from internal CRM reveals:
+                                </p>
+
+                                <ul style="margin-left: 20px;">
+                                    <li>73% work in tech, finance, or creative industries</li>
+                                    <li>81% reported flexible/hybrid work arrangements</li>
+                                    <li>Average household income: RM 18,500/month</li>
+                                    <li>Top amenity priorities: Gym (92%), Co-working (78%), Pool (71%)</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- User Feedback -->
+                        <div class="data-summary-card">
+                            <div class="summary-header">
+                                <div class="summary-title">USER DIRECTION</div>
+                                <div class="summary-actions">
+                                    <button class="summary-action">EDIT</button>
+                                </div>
+                            </div>
+
+                            <div style="padding: 16px;">
+                                <div style="background: #1a1a1a; padding: 12px; border-radius: 4px; margin-bottom: 12px;">
+                                    <div style="font-size: 10px; color: #00aaff; margin-bottom: 4px;">USER INPUT</div>
+                                    <div style="color: #e0e0e0;">
+                                        This co-working trend is stronger than expected. Let's dig deeper - can we cross-reference with LinkedIn data to see which specific tech companies these buyers work for? Also interested in understanding peak usage hours for these co-working spaces.
+                                    </div>
+                                </div>
+
+                                <div style="background: #1a1a1a; padding: 12px; border-radius: 4px;">
+                                    <div style="font-size: 10px; color: #00ff88; margin-bottom: 4px;">AI RESPONSE</div>
+                                    <div style="color: #e0e0e0;">
+                                        Excellent direction. I'll modify the research plan to include LinkedIn employment data cross-referencing and add a new branch to analyze co-working space utilization patterns. We can pull data from building management systems and social media check-ins to map peak usage hours.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="scratchpad">
+                    <div class="scratchpad-header">
+                        <div style="font-size: 12px; font-weight: 600; color: #00ff88;">RESEARCH SCRATCHPAD</div>
+                        <div class="scratchpad-tabs">
+                            <div class="scratchpad-tab active">NOTES</div>
+                            <div class="scratchpad-tab">INSIGHTS</div>
+                            <div class="scratchpad-tab">TODO</div>
+                        </div>
+                    </div>
+
+                    <div class="scratchpad-content">
+                        <div class="note-entry">
+                            <div class="note-meta">
+                                <span class="note-author human">USER</span>
+                                <span class="note-time">14:23</span>
+                            </div>
+                            <div style="color: #e0e0e0; margin-bottom: 8px;">
+                                Initial hypothesis: Young professionals in Mont Kiara (25-35, tech sector) prioritize wellness amenities over unit size. Need to validate with transaction data.
+                            </div>
+                            <div class="source-tags">
+                                <span class="source-tag">#hypothesis</span>
+                                <span class="source-tag">#wellness</span>
+                            </div>
+                        </div>
+
+                        <div class="note-entry">
+                            <div class="note-meta">
+                                <span class="note-author ai">AI</span>
+                                <span class="note-time">14:25</span>
+                            </div>
+                            <div style="color: #e0e0e0; margin-bottom: 8px;">
+                                Discovered correlation: Properties with 24/7 gym access show 42% faster sales velocity. Instagram data shows 423 unique users posting from gym locations in Mont Kiara residential buildings - 82% between ages 25-34 based on profile analysis.
+                            </div>
+                            <div class="source-tags">
+                                <span class="source-tag">#data-point</span>
+                                <span class="source-tag">#gym-correlation</span>
+                            </div>
+                        </div>
+
+                        <div class="note-entry">
+                            <div class="note-meta">
+                                <span class="note-author human">USER</span>
+                                <span class="note-time">14:28</span>
+                            </div>
+                            <div style="color: #e0e0e0; margin-bottom: 8px;">
+                                The co-working trend is interesting. Can we branch off and explore WFH statistics for tech companies in KL? Might explain the demand spike.
+                            </div>
+                            <div class="source-tags">
+                                <span class="source-tag">#branch-idea</span>
+                                <span class="source-tag">#co-working</span>
+                            </div>
+                        </div>
+
+                        <div class="note-entry">
+                            <div class="note-meta">
+                                <span class="note-author ai">AI</span>
+                                <span class="note-time">14:30</span>
+                            </div>
+                            <div style="color: #e0e0e0; margin-bottom: 8px;">
+                                Created branch "co-working-demand" to investigate. Initial LinkedIn data shows 67% of tech professionals in Mont Kiara work hybrid/remote. Key employers: Grab (234), Shopee (189), local startups (500+).
+                            </div>
+                            <div class="source-tags">
+                                <span class="source-tag">#branched</span>
+                                <span class="source-tag">#linkedin-data</span>
+                                <span class="source-tag">#employers</span>
+                            </div>
+                        </div>
+
+                        <div class="note-entry">
+                            <div class="note-meta">
+                                <span class="note-author human">USER</span>
+                                <span class="note-time">14:35</span>
+                            </div>
+                            <div style="color: #e0e0e0; margin-bottom: 8px;">
+                                INSIGHT: Properties near MRT stations + co-working might be the sweet spot. Check correlation between transit accessibility and amenity preferences.
+                            </div>
+                            <div class="source-tags">
+                                <span class="source-tag">#insight</span>
+                                <span class="source-tag">#transit</span>
+                                <span class="source-tag">#investigate</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Knowledge Base -->
+        <div id="knowledge" class="main-content">
+            <div class="knowledge-container">
+                <div class="kb-sidebar">
+                    <input type="text" class="kb-search" placeholder="Filter nodes...">
+                    <input type="text" class="kb-query" placeholder="Ask: What do we know about wellness amenities in Mont Kiara?">
+
+                    <div style="margin-bottom: 16px;">
+                        <div style="font-size: 10px; color: #888; margin-bottom: 8px; text-transform: uppercase;">Quick Filters</div>
+                        <div style="display: flex; flex-wrap: wrap; gap: 4px;">
+                            <button class="filter-option active">All Sources</button>
+                            <button class="filter-option">Internal CRM</button>
+                            <button class="filter-option">Research</button>
+                            <button class="filter-option">Microlens</button>
+                            <button class="filter-option">External APIs</button>
+                        </div>
+                    </div>
+
+                    <div style="margin-bottom: 16px;">
+                        <div style="font-size: 10px; color: #888; margin-bottom: 8px; text-transform: uppercase;">Data Types</div>
+                        <div style="display: flex; flex-wrap: wrap; gap: 4px;">
+                            <button class="filter-option">Property</button>
+                            <button class="filter-option">Demographics</button>
+                            <button class="filter-option">Social</button>
+                            <button class="filter-option">Economic</button>
+                            <button class="filter-option">Competition</button>
+                        </div>
+                    </div>
+
+                    <div>
+                        <div style="font-size: 10px; color: #888; margin-bottom: 8px; text-transform: uppercase;">Recent Nodes</div>
+                        <div style="display: flex; flex-direction: column; gap: 4px;">
+                            <div style="padding: 8px; background: #1a1a1a; border: 1px solid #2a2a2a; border-radius: 4px; font-size: 11px; cursor: pointer;">
+                                Co-working Space Analysis
+                            </div>
+                            <div style="padding: 8px; background: #1a1a1a; border: 1px solid #2a2a2a; border-radius: 4px; font-size: 11px; cursor: pointer;">
+                                Mont Kiara Demographics
+                            </div>
+                            <div style="padding: 8px; background: #1a1a1a; border: 1px solid #2a2a2a; border-radius: 4px; font-size: 11px; cursor: pointer;">
+                                Wellness Amenity Trends
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="graph-view">
+                    <div class="graph-controls">
+                        <button class="control-btn">ZOOM IN</button>
+                        <button class="control-btn">ZOOM OUT</button>
+                        <button class="control-btn">CENTER</button>
+                    </div>
+
+                    <svg class="graph-svg" viewBox="0 0 1200 800">
+                        <!-- Define gradients -->
+                        <defs>
+                            <radialGradient id="nodeGradient1">
+                                <stop offset="0%" style="stop-color:#00ff88;stop-opacity:0.2" />
+                                <stop offset="100%" style="stop-color:#00ff88;stop-opacity:0" />
+                            </radialGradient>
+                            <radialGradient id="nodeGradient2">
+                                <stop offset="0%" style="stop-color:#00aaff;stop-opacity:0.2" />
+                                <stop offset="100%" style="stop-color:#00aaff;stop-opacity:0" />
+                            </radialGradient>
+                        </defs>
+
+                        <!-- Links -->
+                        <g class="links">
+                            <!-- Central connections -->
+                            <line class="link highlighted" x1="600" y1="400" x2="450" y2="250" />
+                            <line class="link highlighted" x1="600" y1="400" x2="750" y2="250" />
+                            <line class="link" x1="600" y1="400" x2="350" y2="400" />
+                            <line class="link" x1="600" y1="400" x2="850" y2="400" />
+                            <line class="link highlighted" x1="600" y1="400" x2="500" y2="550" />
+                            <line class="link" x1="600" y1="400" x2="700" y2="550" />
+
+                            <!-- Secondary connections -->
+                            <line class="link" x1="450" y1="250" x2="300" y2="150" />
+                            <line class="link" x1="450" y1="250" x2="400" y2="100" />
+                            <line class="link" x1="750" y1="250" x2="900" y2="150" />
+                            <line class="link" x1="750" y1="250" x2="800" y2="100" />
+
+                            <!-- Tertiary connections -->
+                            <line class="link" x1="350" y1="400" x2="200" y2="350" />
+                            <line class="link" x1="350" y1="400" x2="250" y2="500" />
+                            <line class="link" x1="850" y1="400" x2="1000" y2="350" />
+                            <line class="link" x1="850" y1="400" x2="950" y2="500" />
+
+                            <!-- Cross connections -->
+                            <line class="link" x1="450" y1="250" x2="350" y2="400" />
+                            <line class="link" x1="750" y1="250" x2="850" y2="400" />
+                            <line class="link" x1="500" y1="550" x2="700" y2="550" />
+                        </g>
+
+                        <!-- Nodes -->
+                        <g class="nodes">
+                            <!-- Central node -->
+                            <g class="node selected" transform="translate(600,400)">
+                                <circle r="50" fill="url(#nodeGradient1)" />
+                                <circle r="40" fill="#1a1a1a" stroke="#00ff88" stroke-width="2" />
+                                <text text-anchor="middle" dy="0" fill="#00ff88" font-size="11" font-weight="600">Mont Kiara</text>
+                                <text text-anchor="middle" dy="15" fill="#00ff88" font-size="9">Analysis Hub</text>
+                            </g>
+
+                            <!-- Primary nodes -->
+                            <g class="node" transform="translate(450,250)">
+                                <circle r="35" fill="#1a1a1a" stroke="#00ff88" stroke-width="1" />
+                                <text text-anchor="middle" dy="0" fill="#e0e0e0" font-size="10">Property</text>
+                                <text text-anchor="middle" dy="12" fill="#888" font-size="8">1,247 units</text>
+                            </g>
+
+                            <g class="node" transform="translate(750,250)">
+                                <circle r="35" fill="#1a1a1a" stroke="#00ff88" stroke-width="1" />
+                                <text text-anchor="middle" dy="0" fill="#e0e0e0" font-size="10">Demographics</text>
+                                <text text-anchor="middle" dy="12" fill="#888" font-size="8">12,847 profiles</text>
+                            </g>
+
+                            <g class="node" transform="translate(350,400)">
+                                <circle r="35" fill="#1a1a1a" stroke="#00aaff" stroke-width="1" />
+                                <text text-anchor="middle" dy="0" fill="#e0e0e0" font-size="10">Social Data</text>
+                                <text text-anchor="middle" dy="12" fill="#888" font-size="8">23,456 posts</text>
+                            </g>
+
+                            <g class="node" transform="translate(850,400)">
+                                <circle r="35" fill="#1a1a1a" stroke="#00aaff" stroke-width="1" />
+                                <text text-anchor="middle" dy="0" fill="#e0e0e0" font-size="10">CRM Data</text>
+                                <text text-anchor="middle" dy="12" fill="#888" font-size="8">Internal</text>
+                            </g>
+
+                            <g class="node" transform="translate(500,550)">
+                                <circle r="35" fill="#1a1a1a" stroke="#00ff88" stroke-width="1" />
+                                <text text-anchor="middle" dy="0" fill="#e0e0e0" font-size="10">Wellness</text>
+                                <text text-anchor="middle" dy="12" fill="#888" font-size="8">Trends</text>
+                            </g>
+
+                            <g class="node" transform="translate(700,550)">
+                                <circle r="35" fill="#1a1a1a" stroke="#333" stroke-width="1" />
+                                <text text-anchor="middle" dy="0" fill="#e0e0e0" font-size="10">Competition</text>
+                                <text text-anchor="middle" dy="12" fill="#888" font-size="8">Analysis</text>
+                            </g>
+
+                            <!-- Secondary nodes -->
+                            <g class="node" transform="translate(300,150)">
+                                <circle r="25" fill="#1a1a1a" stroke="#333" stroke-width="1" />
+                                <text text-anchor="middle" dy="0" fill="#888" font-size="9">High-Rise</text>
+                                <text text-anchor="middle" dy="10" fill="#666" font-size="8">Condos</text>
+                            </g>
+
+                            <g class="node" transform="translate(400,100)">
+                                <circle r="25" fill="#1a1a1a" stroke="#333" stroke-width="1" />
+                                <text text-anchor="middle" dy="0" fill="#888" font-size="9">Service</text>
+                                <text text-anchor="middle" dy="10" fill="#666" font-size="8">Apartments</text>
+                            </g>
+
+                            <g class="node" transform="translate(900,150)">
+                                <circle r="25" fill="#1a1a1a" stroke="#333" stroke-width="1" />
+                                <text text-anchor="middle" dy="0" fill="#888" font-size="9">Tech</text>
+                                <text text-anchor="middle" dy="10" fill="#666" font-size="8">Workers</text>
+                            </g>
+
+                            <g class="node" transform="translate(800,100)">
+                                <circle r="25" fill="#1a1a1a" stroke="#333" stroke-width="1" />
+                                <text text-anchor="middle" dy="0" fill="#888" font-size="9">Young</text>
+                                <text text-anchor="middle" dy="10" fill="#666" font-size="8">Families</text>
+                            </g>
+
+                            <!-- Tertiary nodes -->
+                            <g class="node" transform="translate(200,350)">
+                                <circle r="20" fill="#1a1a1a" stroke="#333" stroke-width="1" />
+                                <text text-anchor="middle" dy="0" fill="#666" font-size="8">Instagram</text>
+                            </g>
+
+                            <g class="node" transform="translate(250,500)">
+                                <circle r="20" fill="#1a1a1a" stroke="#333" stroke-width="1" />
+                                <text text-anchor="middle" dy="0" fill="#666" font-size="8">Twitter/X</text>
+                            </g>
+
+                            <g class="node" transform="translate(1000,350)">
+                                <circle r="20" fill="#1a1a1a" stroke="#333" stroke-width="1" />
+                                <text text-anchor="middle" dy="0" fill="#666" font-size="8">Buyers</text>
+                            </g>
+
+                            <g class="node" transform="translate(950,500)">
+                                <circle r="20" fill="#1a1a1a" stroke="#333" stroke-width="1" />
+                                <text text-anchor="middle" dy="0" fill="#666" font-size="8">Sellers</text>
+                            </g>
+
+                            <!-- Special highlighted node -->
+                            <g class="node" transform="translate(600,300)">
+                                <circle r="30" fill="#1a1a1a" stroke="#ffaa00" stroke-width="2" />
+                                <text text-anchor="middle" dy="-5" fill="#ffaa00" font-size="10" font-weight="600">Co-working</text>
+                                <text text-anchor="middle" dy="8" fill="#ffaa00" font-size="9">Analysis</text>
+                                <text text-anchor="middle" dy="20" fill="#666" font-size="8">[Branch]</text>
+                            </g>
+                        </g>
+                    </svg>
+                </div>
+
+                <div class="kb-detail">
+                    <div class="detail-header">
+                        <div style="font-size: 16px; font-weight: 600; color: #00ff88;">Mont Kiara Analysis Hub</div>
+                        <div class="detail-meta" style="margin-top: 8px;">
+                            <div class="meta-item">
+                                <span>Created:</span>
+                                <span class="meta-value">2024-10-15</span>
+                            </div>
+                            <div class="meta-item">
+                                <span>Updated:</span>
+                                <span class="meta-value">Today 14:45</span>
+                            </div>
+                            <div class="meta-item">
+                                <span>Connections:</span>
+                                <span class="meta-value">47</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="detail-section">
+                        <div class="detail-section-title">OVERVIEW</div>
+                        <p style="color: #e0e0e0; line-height: 1.6;">
+                            Central knowledge node for Mont Kiara market analysis. Aggregates property data, demographic insights, social sentiment, and competitive intelligence. Primary focus on understanding young professional preferences for residential development optimization.
+                        </p>
+                    </div>
+
+                    <div class="detail-section">
+                        <div class="detail-section-title">KEY INSIGHTS</div>
+                        <ul style="color: #e0e0e0; padding-left: 20px; line-height: 1.8;">
+                            <li><strong>Wellness Priority:</strong> 92% of target demographic prioritize gym access</li>
+                            <li><strong>Co-working Demand:</strong> 67% faster sales for units with co-working spaces</li>
+                            <li><strong>Price Premium:</strong> Wellness amenities command 12-18% premium</li>
+                            <li><strong>Demographics:</strong> 73% tech/finance professionals, avg age 29</li>
+                            <li><strong>Work Pattern:</strong> 81% hybrid/remote work arrangements</li>
+                        </ul>
+                    </div>
+
+                    <div class="detail-section">
+                        <div class="detail-section-title">CONNECTED NODES (47)</div>
+                        <div class="connection-list">
+                            <div class="connection-item">
+                                <div>Property Transaction Data</div>
+                                <div class="connection-type">Data Source • 1,847 transactions</div>
+                            </div>
+                            <div class="connection-item">
+                                <div>Young Professional Demographics</div>
+                                <div class="connection-type">Analysis • 12,847 profiles</div>
+                            </div>
+                            <div class="connection-item">
+                                <div>Wellness Amenity Trends 2024</div>
+                                <div class="connection-type">Research Report • Updated weekly</div>
+                            </div>
+                            <div class="connection-item">
+                                <div>Co-working Space Analysis [Branch]</div>
+                                <div class="connection-type">Active Research • 78% complete</div>
+                            </div>
+                            <div class="connection-item">
+                                <div>Competitor: SP Setia Sky Suites</div>
+                                <div class="connection-type">Comparative Analysis</div>
+                            </div>
+                            <div class="connection-item">
+                                <div>Social Media Sentiment Analysis</div>
+                                <div class="connection-type">Real-time Data • 23,456 posts</div>
+                            </div>
+                            <div class="connection-item">
+                                <div>Internal CRM: Buyer Profiles</div>
+                                <div class="connection-type">Legacy System • 477 matched</div>
+                            </div>
+                            <div class="connection-item">
+                                <div>Q3 2024 Market Report</div>
+                                <div class="connection-type">Document • Board Presentation</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="detail-section">
+                        <div class="detail-section-title">DATA SOURCES</div>
+                        <div class="source-tags">
+                            <span class="source-tag">iProperty API</span>
+                            <span class="source-tag">PropertyGuru</span>
+                            <span class="source-tag">LinkedIn Jobs</span>
+                            <span class="source-tag">Instagram API</span>
+                            <span class="source-tag">Twitter/X API</span>
+                            <span class="source-tag">Internal CRM</span>
+                            <span class="source-tag">SSM Registry</span>
+                            <span class="source-tag">DOSM Census</span>
+                            <span class="source-tag">Google Places</span>
+                            <span class="source-tag">Building IoT</span>
+                        </div>
+                    </div>
+
+                    <div class="detail-section">
+                        <div class="detail-section-title">RECENT ACTIVITY</div>
+                        <div style="display: flex; flex-direction: column; gap: 8px;">
+                            <div style="padding: 8px; background: #1a1a1a; border-left: 3px solid #00ff88; font-size: 10px;">
+                                <div style="color: #888; margin-bottom: 2px;">14:45 - AI Research Partner</div>
+                                <div style="color: #e0e0e0;">Added: Co-working space utilization data from 12 properties</div>
+                            </div>
+                            <div style="padding: 8px; background: #1a1a1a; border-left: 3px solid #00aaff; font-size: 10px;">
+                                <div style="color: #888; margin-bottom: 2px;">14:30 - User</div>
+                                <div style="color: #e0e0e0;">Query: Correlation between gym hours and sales velocity</div>
+                            </div>
+                            <div style="padding: 8px; background: #1a1a1a; border-left: 3px solid #00ff88; font-size: 10px;">
+                                <div style="color: #888; margin-bottom: 2px;">14:15 - Microlens</div>
+                                <div style="color: #e0e0e0;">Updated: Real-time social sentiment scores</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function showTab(tabName) {
+            // Hide all content
+            document.querySelectorAll('.main-content').forEach(content => {
+                content.classList.remove('active');
+            });
+
+            // Remove active from all tabs
+            document.querySelectorAll('.nav-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+
+            // Show selected content
+            document.getElementById(tabName).classList.add('active');
+
+            // Activate selected tab
+            event.target.classList.add('active');
+        }
+
+        function toggleSection(header) {
+            header.classList.toggle('expanded');
+            const content = header.nextElementSibling;
+            content.classList.toggle('show');
+        }
+
+        // Simulate hex cell hover
+        document.querySelectorAll('.hex-cell').forEach(hex => {
+            hex.addEventListener('mouseenter', function(e) {
+                const tooltip = document.querySelector('.hex-tooltip');
+                if (this.dataset.location) {
+                    tooltip.style.display = 'block';
+                    tooltip.style.top = (e.pageY + 10) + 'px';
+                    tooltip.style.left = (e.pageX + 10) + 'px';
+                }
+            });
+
+            hex.addEventListener('mouseleave', function() {
+                document.querySelector('.hex-tooltip').style.display = 'none';
+            });
+        });
+    </script>
+</body>
+</html>
